@@ -23,6 +23,21 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  # must have
+  cloud_firestore: ^0.14.4
+  get_it: ^5.0.4
+  data_connection_checker: ^0.3.4
+  flutter_bloc: ^6.1.1
+
+  #  optional
+  firebase_ml_vision: ^0.9.10
+  dartz: ^0.9.1
+  image_picker: ^0.6.7+17
+  #  camera: ^0.6.4+5
+
+  #  not necessary i just want to try it
+  sliding_up_panel: ^1.0.2
+
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -32,12 +47,7 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  firebase_ml_vision: ^0.9.10
-  image_picker: ^0.6.7+17
-  camera: ^0.6.4+5
-  camerawesome: ^0.2.1+2
-  sliding_up_panel: ^1.0.2
-  cloud_firestore: ^0.14.4
+  mockito: ^4.1.3
 
 
 

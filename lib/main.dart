@@ -26,7 +26,7 @@ class _MyAppState extends State<MyApp> {
   final DocumentTextRecognizer cloudDocumentTextRecognizer =
       FirebaseVision.instance.cloudDocumentTextRecognizer();
 
-  Future getImage() async {
+  Future processImage() async {
     final pickedFile = await picker.getImage(source: ImageSource.camera);
     final FirebaseVisionImage visionImage =
         FirebaseVisionImage.fromFile(File(pickedFile.path));
@@ -65,7 +65,7 @@ class _MyAppState extends State<MyApp> {
         },
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: getImage,
+        onPressed: processImage,
         tooltip: "Pick Image",
         child: Icon(Icons.add),
       ),
