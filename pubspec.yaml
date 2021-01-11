@@ -32,8 +32,15 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-#  firebase_ml_vision: ^0.9.10
+  firebase_ml_vision: ^0.9.10
   image_picker: ^0.6.7+17
+  camera: ^0.6.4+5
+  camerawesome: ^0.2.1+2
+  sliding_up_panel: ^1.0.2
+  cloud_firestore: ^0.14.4
+
+
+
 
 
 # For information on the generic Dart part of this file, see the
