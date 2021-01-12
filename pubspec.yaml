@@ -28,6 +28,9 @@ dependencies:
   get_it: ^5.0.4
   data_connection_checker: ^0.3.4
   flutter_bloc: ^6.1.1
+  firebase_core: ^0.5.3
+  equatable: ^1.2.5
+  edit_distance: ^0.4.1
 
   #  optional
   firebase_ml_vision: ^0.9.10
