@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_text_recognition/presentation/widget/text_result.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:firebase_ml_vision/firebase_ml_vision.dart';
@@ -11,7 +12,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class PurchasePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-
+    return Container();
   }
 }
 
@@ -89,37 +90,3 @@ class _MyAppState extends State<MyApp> {
   }
 }
 
-class ResultWidget extends StatelessWidget {
-  final String result;
-  final sc;
-
-  const ResultWidget({
-    Key key,
-    this.result = "loading",
-    this.sc,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.only(left: 20, top: 10),
-      child: ListView.builder(
-          itemCount: 1,
-          controller: sc,
-          itemBuilder: (BuildContext context, int index) {
-            return Column(children: [
-              Center(
-                child: Container(
-                  padding: EdgeInsets.symmetric(vertical: 10),
-                  child: Text(
-                    "result".toUpperCase(),
-                    style: TextStyle(fontSize: 25, fontWeight: FontWeight.w700),
-                  ),
-                ),
-              ),
-              Align(alignment: Alignment.center, child: Text(result))
-            ]);
-          }),
-    );
-  }
-}

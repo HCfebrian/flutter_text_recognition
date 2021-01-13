@@ -1,12 +1,13 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:dartz/dartz.dart';
 import 'package:edit_distance/edit_distance.dart';
-import 'package:firebase_ml_vision/firebase_ml_vision.dart';
 import 'package:flutter_text_recognition/core/failure.dart';
-import 'package:flutter_text_recognition/domain/contract_repository/camera_cntract_repo.dart';
+import 'package:flutter_text_recognition/domain/contract_repository/camera_contract_repo.dart';
+import 'package:flutter_text_recognition/domain/contract_repository/mlkit_contract_repo.dart';
 import 'package:flutter_text_recognition/domain/contract_repository/purchase_contract_repo.dart';
-import 'package:flutter_text_recognition/domain/entity/purchase_order.dart';
+import 'package:flutter_text_recognition/domain/entity/similarity_result.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:meta/meta.dart';
 
@@ -14,31 +15,37 @@ class PurchaseUsecase {
   final PurchaseRepoAbs purchaseRepo;
   final CameraRepoAbs cameraRepoAbs;
   final Levenshtein levenshtein;
-  final TextRecognizer textRecognizer;
+  final MLKitRepoAbs mlkitRepoAbs;
 
   PurchaseUsecase({
     @required this.purchaseRepo,
     @required this.cameraRepoAbs,
     @required this.levenshtein,
-    @required this.textRecognizer,
+    @required this.mlkitRepoAbs,
   });
 
-
-  Future<Either<Failure, double>> getSimilarity() async {
+  Future<Either<Failure, SimilarityResult>> getSimilarity() async {
     File fileImage;
-    final file = await cameraRepoAbs.getImage(ImageSource.camera);
-    file.fold((l) {
-      return CameraFailure("Camera Error");
+    String textResult;
+
+    //get image
+    final fileOF = await cameraRepoAbs.getImage(ImageSource.camera);
+    fileOF.fold((l) {
+      return CameraFailure(l.message);
     }, (r) {
       fileImage = r;
     });
 
-    final FirebaseVisionImage visionImage = FirebaseVisionImage.fromFile(fileImage);
-    final VisionText visionText = await textRecognizer.processImage(visionImage);
-    final result = visionText.text;
+    //process image
 
-    print(result);
-    return Right(20);
+    final textResultOF = await mlkitRepoAbs.getImage(fileImage);
+    textResultOF.fold((l) => MLFailure(l.message), (r) => textResult = r);
 
+    log(textResult);
+    return Right(SimilarityResult(
+      imageFile: fileImage,
+      text: textResult,
+      similarity: 20,
+    ));
   }
 }

@@ -12,6 +12,11 @@
         android:requestLegacyExternalStorage="true"
         android:label="flutter_text_recognition"
         android:icon="@mipmap/ic_launcher">
+
+        <meta-data
+            android:name="com.google.firebase.ml.vision.DEPENDENCIES"
+            android:value="ocr" />
+
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"

@@ -16,3 +16,7 @@ class FirebaseFailure extends Failure {
 class CameraFailure extends Failure {
   CameraFailure(String message) : super(message);
 }
+
+class MLFailure extends Failure {
+  MLFailure(String message) : super(message);
+}
