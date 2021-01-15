@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_text_recognition/presentation/widget/dialog.dart';
 import 'package:flutter_text_recognition/presentation/widget/text_result.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:meta/meta.dart';
@@ -10,6 +11,8 @@ class PurchaseScreenContent extends StatelessWidget {
   final String textFromMl;
   final File fileImage;
   final double similarity;
+  final bool isShown;
+  final String message;
 
   const PurchaseScreenContent({
     Key key,
@@ -17,6 +20,8 @@ class PurchaseScreenContent extends StatelessWidget {
     @required this.fileImage,
     @required this.similarity,
     @required this.textFromMl,
+    this.isShown,
+    this.message,
   }) : super(key: key);
 
   @override
@@ -28,6 +33,10 @@ class PurchaseScreenContent extends StatelessWidget {
         children: [
           ImageContent(
             fileImage: fileImage,
+          ),
+          DialogManager(
+            isShown: isShown,
+            message: message,
           )
         ],
       ),
@@ -40,7 +49,9 @@ class PurchaseScreenContent extends StatelessWidget {
               itemBuilder: (BuildContext context, int index) {
                 return Column(
                   children: [
-                    Align(alignment: Alignment.center, child: Text(similarity.toString())),
+                    Align(
+                        alignment: Alignment.center,
+                        child: Text(similarity.toString())),
                   ],
                 );
               }),

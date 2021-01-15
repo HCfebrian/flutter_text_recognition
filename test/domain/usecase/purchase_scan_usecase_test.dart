@@ -152,7 +152,7 @@ void main() {
           .thenThrow((realInvocation) async => Exception());
 
       //act
-      final result = await purchaseScanUsecase.getSimilarity;
+      final result =  purchaseScanUsecase.getSimilarity;
       //assert
       expect(await mockCameraRepo.getImage(ImageSource.camera), testFile);
       expect(await mockMLRepo.getPurchaseID(testFile), "123");

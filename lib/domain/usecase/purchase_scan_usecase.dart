@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:edit_distance/edit_distance.dart';
-import 'package:flutter_text_recognition/core/failure.dart';
+
 import 'package:flutter_text_recognition/domain/contract_repository/camera_repo_abs.dart';
 import 'package:flutter_text_recognition/domain/contract_repository/mlkit_repo_abs.dart';
 import 'package:flutter_text_recognition/domain/contract_repository/purchase_repo_abs.dart';

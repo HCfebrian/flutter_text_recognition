@@ -1,4 +1,4 @@
-import 'package:equatable/equatable.dart';
+
 
 class FirebaseFailure implements Exception {
   final message;
