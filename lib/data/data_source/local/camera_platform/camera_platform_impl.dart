@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:dartz/dartz.dart';
 import 'package:flutter_text_recognition/core/failure.dart';
 import 'package:flutter_text_recognition/data/data_source/local/camera_platform/camera_platform_abs.dart';
 import 'package:image_picker/image_picker.dart';
@@ -12,8 +11,8 @@ class CameraPlatformImpl extends CameraPlatformAbs {
   CameraPlatformImpl({@required this.picker});
 
   @override
-  Future<Either<Failure, File>> getImage(ImageSource imageSource) async {
+  Future<File> getImage(ImageSource imageSource) async {
     final pickedFile = await picker.getImage(source: imageSource);
-    return Right(File(pickedFile.path));
+    return File(pickedFile.path);
   }
 }

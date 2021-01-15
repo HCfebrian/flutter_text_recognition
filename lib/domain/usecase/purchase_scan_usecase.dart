@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:dartz/dartz.dart';
 import 'package:edit_distance/edit_distance.dart';
 import 'package:flutter_text_recognition/core/failure.dart';
 import 'package:flutter_text_recognition/domain/contract_repository/camera_repo_abs.dart';
@@ -26,46 +25,47 @@ class PurchaseScanUsecase {
     @required this.jaccard,
   });
 
-  Future<Either<Failure, SimilarityResult>> getSimilarity() async {
-    File fileImage;
-    String purchaseId;
-    String mlString;
-    PurchaseEntity purchaseEntity;
+  Future<SimilarityResult> getSimilarity() async {
+    File file;
+    String purchaseID, mlString;
+    PurchaseEntity resultDb;
 
     //get image
-    final fileOF = await cameraRepoAbs.getImage(ImageSource.camera);
-    fileOF.fold((fail) => Left(CameraFailure(fail.message)), (resultImage) {
-      fileImage = resultImage;
-    });
+    try {
+      file = await cameraRepoAbs.getImage(ImageSource.camera);
+      print("file : "+file.path);
+    } catch (_) {
+      throw Exception("Camera Fail");
+    }
 
     //get purchase id
-    final purchaseOrFailure = await mlkitRepoAbs.getPurchaseID(fileImage);
-    purchaseOrFailure.fold((failure) => Left(MLFailure(failure.message)),
-        (result) => purchaseId = result);
-    print("purchaseID " + purchaseId.toString());
+    try {
+      purchaseID = await mlkitRepoAbs.getPurchaseID(file);
+      print("purchaseID " + purchaseID.toString());
+    } catch (_) {
+      throw Exception("Faild to get PurchaseId");
+    }
 
     //get mlkit full string
-    final mlStringOrFailure = await mlkitRepoAbs.getFullText(fileImage);
-    mlStringOrFailure.fold((failure) => Left(MLFailure(failure.message)),
-        (mlText) => mlString = mlText);
-    print("ml text " + mlString);
+    try {
+      mlString = await mlkitRepoAbs.getFullText(file);
+    } catch (_) {
+      throw Exception("Failed to get Pic Text");
+    }
 
     //get data from firebase
-    final result = await purchaseRepo.getPurchaseDetail(purchaseId);
-    result.fold((failure) {
-      print("log failure");
-      return Left(FirebaseFailure(failure.message));
-    }, (result) {
-      print("log result");
-      return purchaseEntity = result;
-    });
-    print("db text " + purchaseEntity.fullText);
+    try {
+      resultDb = await purchaseRepo.getPurchaseDetail(purchaseID);
+      print("db text " + resultDb.fullText);
+    } catch (_) {
+      throw Exception("Failed to get db text");
+    }
 
     // get similarity
-    final similarity = levenshtein.distance(mlString, purchaseEntity.fullText);
+    final similarity = levenshtein.distance(mlString, resultDb.fullText);
     final jaccardSim = jaccard.normalizedDistance(
         mlString.replaceAll(" ", "").replaceAll(".", "").replaceAll(",", ""),
-        purchaseEntity.fullText
+        resultDb.fullText
             .replaceAll(" ", "")
             .replaceAll(".", "")
             .replaceAll(",", ""));
@@ -73,13 +73,11 @@ class PurchaseScanUsecase {
     print("levenshtein " + similarity.toString());
     print("jaccard " + jaccardSim.toString());
 
-    return Right(
-      SimilarityResult(
-        imageFile: fileImage,
-        textFromDb: purchaseEntity.fullText,
-        similarity: jaccardSim,
-        textFromMl: mlString,
-      ),
+    return SimilarityResult(
+      imageFile: file,
+      textFromDb: resultDb.fullText,
+      similarity: jaccardSim,
+      textFromMl: mlString,
     );
   }
 }

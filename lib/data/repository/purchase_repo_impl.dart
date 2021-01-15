@@ -1,4 +1,3 @@
-import 'package:dartz/dartz.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_text_recognition/core/failure.dart';
 import 'package:flutter_text_recognition/data/data_source/remote/purchase_order_remote/purchase_order_remote_abs.dart';
@@ -11,11 +10,7 @@ class PurchaseRepoImpl extends PurchaseRepoAbs {
   PurchaseRepoImpl({@required this.purchaseRemoteAbs});
 
   @override
-  Future<Either<Failure, PurchaseEntity>> getPurchaseDetail(String id) async {
-    try {
-      return Right(await purchaseRemoteAbs.getPurchaseDetail(id));
-    } catch (e) {
-      return Left(FirebaseFailure("Failed to get data from firebase"));
-    }
+  Future<PurchaseEntity> getPurchaseDetail(String id) async {
+    return await purchaseRemoteAbs.getPurchaseDetail(id);
   }
 }
