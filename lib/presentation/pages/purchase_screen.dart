@@ -7,15 +7,18 @@ class PurchaseScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Hi There, scan your "),),
+      appBar: AppBar(
+        title: Text("Hi There, scan your receipt"),
+      ),
       body: BlocBuilder<SimilarityImageBloc, SimilarityImageState>(
         builder: (context, state) {
           if (state is ProcessImageInitial) {
             return PurchaseScreenContent(
-                text: "no image, no text!",
-                similarity: 0,
-                fileImage: null,
-              );
+              textFromDb: "no image, no text!",
+              similarity: 0,
+              fileImage: null,
+              textFromMl: "no ml text yet",
+            );
           }
 
           if (state is ProcessImageLoadingState) {
@@ -28,9 +31,10 @@ class PurchaseScreen extends StatelessWidget {
 
           if (state is ProcessImageLoadedState) {
             return PurchaseScreenContent(
-              text: state.textResult,
-              similarity: 0,
+              textFromDb: state.textFromDb,
+              similarity: state.similarity,
               fileImage: state.file,
+              textFromMl: state.textFromML,
             );
           }
           // this is error state
@@ -42,7 +46,6 @@ class PurchaseScreen extends StatelessWidget {
           );
         },
       ),
-
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.photo_camera),
         onPressed: () {
@@ -53,4 +56,3 @@ class PurchaseScreen extends StatelessWidget {
     );
   }
 }
-

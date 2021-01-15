@@ -41,6 +41,7 @@ class PurchaseModel extends PurchaseEntity {
 
   factory PurchaseModel.from(DocumentSnapshot ds) {
     final data = ds.data();
+
     String encode = json
         .encode(data)
         .replaceAll("{", "")
@@ -48,6 +49,7 @@ class PurchaseModel extends PurchaseEntity {
         .replaceAll(":", "")
         .replaceAll("\"", "");
     print(encode);
+
     return PurchaseModel(
         purchaseID: ds.id,
         deliveryData: data["delivery date"],

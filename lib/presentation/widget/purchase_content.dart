@@ -3,17 +3,20 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_text_recognition/presentation/widget/text_result.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
+import 'package:meta/meta.dart';
 
 class PurchaseScreenContent extends StatelessWidget {
-  final String text;
+  final String textFromDb;
+  final String textFromMl;
   final File fileImage;
   final double similarity;
 
   const PurchaseScreenContent({
     Key key,
-    this.text,
-    this.fileImage,
-    this.similarity,
+    @required this.textFromDb,
+    @required this.fileImage,
+    @required this.similarity,
+    @required this.textFromMl,
   }) : super(key: key);
 
   @override
@@ -21,15 +24,26 @@ class PurchaseScreenContent extends StatelessWidget {
     return SlidingUpPanel(
       minHeight: 150,
       body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          fileImage == null ? Center(child: Text("Use me please!")) : Image.file(fileImage)
+          ImageContent(
+            fileImage: fileImage,
+          )
         ],
       ),
       panelBuilder: (ScrollController sc) {
-        return ResultWidget(
-          sc: sc,
-          result: text,
+        return Container(
+          padding: EdgeInsets.only(left: 20, top: 10),
+          child: ListView.builder(
+              itemCount: 1,
+              controller: sc,
+              itemBuilder: (BuildContext context, int index) {
+                return Column(
+                  children: [
+                    Align(alignment: Alignment.center, child: Text(similarity.toString())),
+                  ],
+                );
+              }),
         );
       },
     );

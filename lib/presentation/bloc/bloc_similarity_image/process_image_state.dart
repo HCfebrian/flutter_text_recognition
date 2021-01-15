@@ -13,13 +13,15 @@ class ProcessImageLoadingState extends SimilarityImageState {}
 
 class ProcessImageLoadedState extends SimilarityImageState {
   final double similarity;
-  final String textResult;
+  final String textFromDb;
+  final String textFromML;
   final File file;
 
   ProcessImageLoadedState(
       {@required this.similarity,
-      @required this.textResult,
-      @required this.file});
+      @required this.textFromDb,
+      @required this.file,
+      @required this.textFromML});
 }
 
 class ProcessImageErrorState extends SimilarityImageState {

@@ -6,13 +6,15 @@ import 'package:meta/meta.dart';
 class SimilarityResult extends Equatable {
   final double similarity;
   final File imageFile;
-  final String text;
+  final String textFromDb;
+  final String textFromMl;
 
   SimilarityResult(
       {@required this.similarity,
       @required this.imageFile,
-      @required this.text});
+      @required this.textFromDb,
+      @required this.textFromMl});
 
   @override
-  List<Object> get props => [similarity, imageFile, text];
+  List<Object> get props => [];
 }

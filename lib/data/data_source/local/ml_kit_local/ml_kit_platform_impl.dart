@@ -1,22 +1,30 @@
 import 'dart:io';
 
 import 'package:firebase_ml_vision/firebase_ml_vision.dart';
-import 'package:flutter_text_recognition/data/data_source/platform/ml_kit_platform/ml_kit_platform_abs.dart';
+import 'package:flutter_text_recognition/data/data_source/local/ml_kit_local/ml_kit_local_abs.dart';
 import 'package:meta/meta.dart';
 
-class MLKitPlatformImpl extends MLKitPlatformAbs {
+class MLKitPlatformImpl extends MLKitLocalAbs {
   final TextRecognizer textRecognizer;
 
   MLKitPlatformImpl({@required this.textRecognizer});
 
   @override
-  Future<String> processImage(File imageFile) async {
+  Future<String> getFullText(File imageFile) async {
+    final visionImage = FirebaseVisionImage.fromFile(imageFile);
+    final visionText = await textRecognizer.processImage(visionImage);
+    return visionText.text;
+  }
+
+  @override
+  Future<String> getPurchaseId(File imageFile) async {
+    String result;
+
     final FirebaseVisionImage visionImage =
         FirebaseVisionImage.fromFile(imageFile);
     final VisionText visionText =
         await textRecognizer.processImage(visionImage);
 
-    String result;
     try {
       visionText.blocks.forEach((element) {
         element.lines.forEach((element) {
@@ -29,8 +37,8 @@ class MLKitPlatformImpl extends MLKitPlatformAbs {
       print(result.length);
     } catch (e) {
       print(e);
+      throw Exception("iteration failed");
     }
-    print(visionText.blocks.asMap().toString());
 
     return result ?? "no result";
   }
