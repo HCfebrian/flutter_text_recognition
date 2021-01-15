@@ -9,9 +9,9 @@ import 'package:flutter_text_recognition/data/data_source/remote/purchase_order_
 import 'package:flutter_text_recognition/data/repository/canera_repo_impl.dart';
 import 'package:flutter_text_recognition/data/repository/mlkit_repo_impl.dart';
 import 'package:flutter_text_recognition/data/repository/purchase_repo_impl.dart';
-import 'package:flutter_text_recognition/domain/contract_repository/camera_contract_repo.dart';
-import 'package:flutter_text_recognition/domain/contract_repository/mlkit_contract_repo.dart';
-import 'package:flutter_text_recognition/domain/contract_repository/purchase_contract_repo.dart';
+import 'package:flutter_text_recognition/domain/contract_repository/camera_repo_abs.dart';
+import 'package:flutter_text_recognition/domain/contract_repository/mlkit_repo_abs.dart';
+import 'package:flutter_text_recognition/domain/contract_repository/purchase_repo_abs.dart';
 import 'package:flutter_text_recognition/domain/usecase/purchase_usecase.dart';
 import 'package:flutter_text_recognition/presentation/bloc/bloc_similarity_image/process_image_bloc.dart';
 import 'package:get_it/get_it.dart';
@@ -37,7 +37,7 @@ void init() {
       () => PurchaseRepoImpl(purchaseRemoteAbs: sl()));
   sl.registerLazySingleton<CameraRepoAbs>(
       () => CameraRepoImpl(cameraPlatform: sl()));
-  sl.registerLazySingleton<MLKitRepoAbs>(
+  sl.registerLazySingleton<MLVisionAbs>(
       () => MLKitRepoImpl(mlKitPlatform: sl()));
 
   //data

@@ -23,6 +23,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+
   # must have
   cloud_firestore: ^0.14.4
   get_it: ^5.0.4
@@ -33,16 +34,14 @@ dependencies:
   edit_distance: ^0.4.1
   camera: ^0.6.4+5
 
-  #  optional
+  # optional
   firebase_ml_vision: ^0.9.10
   dartz: ^0.9.1
   image_picker: ^0.6.7+17
-  #  camera: ^0.6.4+5
+  # camera: ^0.6.4+5
 
-  #  not necessary i just want to try it
+  # not necessary i just want to try it
   sliding_up_panel: ^1.0.2
-
-
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.

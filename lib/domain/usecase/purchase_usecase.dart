@@ -4,9 +4,10 @@ import 'dart:io';
 import 'package:dartz/dartz.dart';
 import 'package:edit_distance/edit_distance.dart';
 import 'package:flutter_text_recognition/core/failure.dart';
-import 'package:flutter_text_recognition/domain/contract_repository/camera_contract_repo.dart';
-import 'package:flutter_text_recognition/domain/contract_repository/mlkit_contract_repo.dart';
-import 'package:flutter_text_recognition/domain/contract_repository/purchase_contract_repo.dart';
+import 'package:flutter_text_recognition/domain/contract_repository/camera_repo_abs.dart';
+import 'package:flutter_text_recognition/domain/contract_repository/mlkit_repo_abs.dart';
+import 'package:flutter_text_recognition/domain/contract_repository/purchase_repo_abs.dart';
+import 'package:flutter_text_recognition/domain/entity/purchase_order.dart';
 import 'package:flutter_text_recognition/domain/entity/similarity_result.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:meta/meta.dart';
@@ -15,7 +16,7 @@ class PurchaseUsecase {
   final PurchaseRepoAbs purchaseRepo;
   final CameraRepoAbs cameraRepoAbs;
   final Levenshtein levenshtein;
-  final MLKitRepoAbs mlkitRepoAbs;
+  final MLVisionAbs mlkitRepoAbs;
 
   PurchaseUsecase({
     @required this.purchaseRepo,
@@ -30,18 +31,23 @@ class PurchaseUsecase {
 
     //get image
     final fileOF = await cameraRepoAbs.getImage(ImageSource.camera);
-    fileOF.fold((l) {
-      return CameraFailure(l.message);
-    }, (r) {
-      fileImage = r;
+    fileOF.fold((fail) {
+      return CameraFailure(fail.message);
+    }, (resultImage) {
+      fileImage = resultImage;
     });
 
     //process image
-
     final textResultOF = await mlkitRepoAbs.getImage(fileImage);
-    textResultOF.fold((l) => MLFailure(l.message), (r) => textResult = r);
+    textResultOF.fold((failure) => MLFailure(failure.message),
+            (result) => textResult = result);
 
-    log(textResult);
+    //get data from firebase
+    PurchaseEntity purchaseEntity;
+    final result = await purchaseRepo.getPurchaseDetail(textResult);
+    result.fold((failure) => FirebaseFailure(failure.message), (result) => purchaseEntity);
+
+
     return Right(SimilarityResult(
       imageFile: fileImage,
       text: textResult,

@@ -16,6 +16,7 @@ class PurchaseEntity extends Equatable {
   final String total;
   final String cost;
   final String vendor;
+  final String fullString;
 
   PurchaseEntity(
       this.deliveryData,
@@ -32,7 +33,8 @@ class PurchaseEntity extends Equatable {
       this.total,
       this.cost,
       this.vendor,
-      this.purchaseId);
+      this.purchaseId,
+      this.fullString);
 
   @override
   List<Object> get props => [
@@ -49,6 +51,6 @@ class PurchaseEntity extends Equatable {
         tax,
         total,
         cost,
-        vendor
+        vendor,fullString
       ];
 }

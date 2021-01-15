@@ -7,6 +7,7 @@ class PurchaseScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(title: Text("Hi There, scan your "),),
       body: BlocBuilder<SimilarityImageBloc, SimilarityImageState>(
         builder: (context, state) {
           if (state is ProcessImageInitial) {
@@ -32,7 +33,7 @@ class PurchaseScreen extends StatelessWidget {
               fileImage: state.file,
             );
           }
-
+          // this is error state
           return Container(
             child: Center(
               child:

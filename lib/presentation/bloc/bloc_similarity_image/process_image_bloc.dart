@@ -23,6 +23,7 @@ class SimilarityImageBloc
   ) async* {
     if (event is TakeAndProcessImageEvent) {
       yield ProcessImageLoadingState();
+
       final result = await purchaseUsecase.getSimilarity();
       yield result.fold(
           (l) => ProcessImageErrorState(message: l.message),
