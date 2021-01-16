@@ -32,13 +32,12 @@ dependencies:
   firebase_core: ^0.5.3
   equatable: ^1.2.5
   edit_distance: ^0.4.1
-  camera: ^0.6.4+5
 
   # optional
   firebase_ml_vision: ^0.9.10
 #  dartz: ^0.9.1
   image_picker: ^0.6.7+17
-  # camera: ^0.6.4+5
+  #  camera: ^0.6.4+5
 
   # not necessary i just want to try it
   sliding_up_panel: ^1.0.2

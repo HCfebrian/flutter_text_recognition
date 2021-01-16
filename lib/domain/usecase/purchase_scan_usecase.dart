@@ -38,7 +38,7 @@ class PurchaseScanUsecase {
       throw Exception("Camera Fail");
     }
 
-    //get purchase id
+    //get purchase id from Mlkit
     try {
       purchaseID = await mlkitRepoAbs.getPurchaseID(file);
       print("purchaseID " + purchaseID.toString());
@@ -46,7 +46,7 @@ class PurchaseScanUsecase {
       throw Exception("Faild to get PurchaseId");
     }
 
-    //get mlkit full string
+    //get full text using MLkit
     try {
       mlString = await mlkitRepoAbs.getFullText(file);
     } catch (_) {

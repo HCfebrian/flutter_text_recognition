@@ -24,6 +24,7 @@ void init() {
 // Feature
   //bloc
   sl.registerFactory(() => SimilarityImageBloc(purchaseUsecase: sl()));
+
   //UseCase
   sl.registerLazySingleton(() => PurchaseScanUsecase(
         jaccard: sl(),
