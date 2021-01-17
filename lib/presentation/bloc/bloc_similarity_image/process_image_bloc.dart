@@ -15,7 +15,8 @@ class SimilarityImageBloc
   final PurchaseScanUsecase purchaseUsecase;
 
   SimilarityImageBloc({@required this.purchaseUsecase})
-      : super(ProcessImageInitial());
+      : assert(purchaseUsecase != null),
+        super(ProcessImageInitial());
 
   @override
   Stream<SimilarityImageState> mapEventToState(

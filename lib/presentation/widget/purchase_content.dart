@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_text_recognition/presentation/widget/dialog.dart';
-import 'package:flutter_text_recognition/presentation/widget/text_result.dart';
+import 'package:flutter_text_recognition/presentation/widget/image_result.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:meta/meta.dart';
 
