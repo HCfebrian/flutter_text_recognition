@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:math';
 
 import 'package:flutter_text_recognition/domain/entity/similarity_result.dart';
 import 'package:flutter_text_recognition/domain/usecase/purchase_scan_usecase.dart';
@@ -23,24 +24,43 @@ main() {
       textFromDb: "example text from db",
       textFromMl: "text from ML kit");
 
-  test(
-    "should emit Loading, Loaded",
-    () async {
-      //arrange
-      when(mockPurchase.getSimilarity())
-          .thenAnswer((realInvocation) async => similarityResultTest);
-      //assert
-      final expected = [
-        ProcessImageLoadingState(),
-        ProcessImageLoadedState(
-            textFromDb: similarityResultTest.textFromDb,
-            textFromML: similarityResultTest.textFromMl,
-            file: similarityResultTest.imageFile,
-            similarity: similarityResultTest.similarity),
-      ];
-      expectLater(similarityImageBloc, emitsInOrder(expected));
-      //act
-      similarityImageBloc.add(TakeAndProcessImageEvent());
-    },
-  );
+  group("test bloc", (){
+    test(
+      "should emit Loading, Loaded",
+          () async {
+        //arrange
+        when(mockPurchase.getSimilarity())
+            .thenAnswer((realInvocation) async => similarityResultTest);
+        //assert
+        final expected = [
+          ProcessImageLoadingState(),
+          ProcessImageLoadedState(
+              textFromDb: similarityResultTest.textFromDb,
+              textFromML: similarityResultTest.textFromMl,
+              file: similarityResultTest.imageFile,
+              similarity: similarityResultTest.similarity),
+        ];
+        expectLater(similarityImageBloc, emitsInOrder(expected));
+        //act
+        similarityImageBloc.add(TakeAndProcessImageEvent());
+      },
+    );
+
+    test(
+      "should emit Loading, Error",
+          () async {
+        //arrange
+        when(mockPurchase.getSimilarity()).thenThrow(Exception("error"));
+        //assert
+        final expected = [
+          ProcessImageLoadingState(),
+          ProcessImageErrorState(message: "error")
+        ];
+        expectLater(similarityImageBloc, emitsInOrder(expected));
+        //act
+        similarityImageBloc.add(TakeAndProcessImageEvent());
+      },
+    );
+  });
+
 }
