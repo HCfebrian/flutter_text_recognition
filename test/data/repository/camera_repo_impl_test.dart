@@ -19,13 +19,16 @@ main() {
 
   final tFile = File("example/of/storage");
 
-  test( "should return File",() async {
-        //arrange
-    when(cameraPlatform.getImage(any)).thenAnswer((realInvocation) async => tFile);
-        //act
-    final result = await cameraRepoImpl.getImage(ImageSource.camera);
-        //assert
-    expect(result, tFile);
-        },
-      );
+  test(
+    "should return File",
+    () async {
+      //arrange
+      when(cameraPlatform.getImage(any))
+          .thenAnswer((realInvocation) async => tFile);
+      //act
+      final result = await cameraRepoImpl.getImage(ImageSource.camera);
+      //assert
+      expect(result, tFile);
+    },
+  );
 }

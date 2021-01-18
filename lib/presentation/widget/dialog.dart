@@ -4,7 +4,7 @@ class DialogManager extends StatelessWidget {
   final isShown;
   final message;
 
-  const DialogManager({Key key, this.isShown = false, this.message = "error"})
+  const DialogManager({Key key, @required this.isShown, this.message = "error"})
       : super(key: key);
 
   @override
@@ -22,6 +22,6 @@ class DialogManager extends StatelessWidget {
               );
             })
         : print("no");
-    return Container();
+    return Container(height: 0,width: 0,);
   }
 }

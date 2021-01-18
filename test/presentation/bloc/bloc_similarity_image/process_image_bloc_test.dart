@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'dart:math';
 
 import 'package:flutter_text_recognition/domain/entity/similarity_result.dart';
 import 'package:flutter_text_recognition/domain/usecase/purchase_scan_usecase.dart';
@@ -24,10 +23,10 @@ main() {
       textFromDb: "example text from db",
       textFromMl: "text from ML kit");
 
-  group("test bloc", (){
+  group("test bloc", () {
     test(
       "should emit Loading, Loaded",
-          () async {
+      () async {
         //arrange
         when(mockPurchase.getSimilarity())
             .thenAnswer((realInvocation) async => similarityResultTest);
@@ -38,7 +37,8 @@ main() {
               textFromDb: similarityResultTest.textFromDb,
               textFromML: similarityResultTest.textFromMl,
               file: similarityResultTest.imageFile,
-              similarity: similarityResultTest.similarity),
+              similarity: similarityResultTest.similarity,
+              isShown: false),
         ];
         expectLater(similarityImageBloc, emitsInOrder(expected));
         //act
@@ -48,13 +48,13 @@ main() {
 
     test(
       "should emit Loading, Error",
-          () async {
+      () async {
         //arrange
         when(mockPurchase.getSimilarity()).thenThrow(Exception("error"));
         //assert
         final expected = [
           ProcessImageLoadingState(),
-          ProcessImageErrorState(message: "error")
+          ProcessImageErrorState(message: "error", isShown: true)
         ];
         expectLater(similarityImageBloc, emitsInOrder(expected));
         //act
@@ -62,5 +62,4 @@ main() {
       },
     );
   });
-
 }

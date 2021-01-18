@@ -58,10 +58,11 @@ void init() {
   //network
 
 // External Dependency
-
   sl.registerLazySingleton(() => FirebaseFirestore.instance);
   sl.registerLazySingleton(() => ImagePicker());
   sl.registerLazySingleton(() => Levenshtein());
   sl.registerLazySingleton(() => Jaccard());
   sl.registerLazySingleton(() => FirebaseVision.instance.textRecognizer());
+
 }
+

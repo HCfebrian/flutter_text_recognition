@@ -12,9 +12,13 @@ import 'package:image_picker/image_picker.dart';
 import 'package:mockito/mockito.dart';
 
 class MockPurchaseRepo extends Mock implements PurchaseRepoAbs {}
+
 class MockCameraRepo extends Mock implements CameraRepoAbs {}
+
 class MockMLRepo extends Mock implements MLRepoAbs {}
+
 class MockLevenshtein extends Mock implements Levenshtein {}
+
 class MockJaccard extends Mock implements Jaccard {}
 
 void main() {
@@ -152,13 +156,12 @@ void main() {
           .thenThrow((realInvocation) async => Exception());
 
       //act
-      final result =  purchaseScanUsecase.getSimilarity;
+      final result = purchaseScanUsecase.getSimilarity;
       //assert
       expect(await mockCameraRepo.getImage(ImageSource.camera), testFile);
       expect(await mockMLRepo.getPurchaseID(testFile), "123");
       expect(await mockPurchaseRepo.getPurchaseDetail("123"), testPurchase);
       expect(() => result(), throwsException);
     });
-
   });
 }

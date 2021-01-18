@@ -18,6 +18,7 @@ class PurchaseScreen extends StatelessWidget {
               similarity: 0,
               fileImage: null,
               textFromMl: "no ml text yet",
+              isShown: false,
             );
           }
 
@@ -35,6 +36,7 @@ class PurchaseScreen extends StatelessWidget {
               similarity: state.similarity,
               fileImage: state.file,
               textFromMl: state.textFromML,
+              isShown: state.isShown,
             );
           }
           // this is error state

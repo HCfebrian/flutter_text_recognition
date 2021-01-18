@@ -24,16 +24,16 @@ class SimilarityImageBloc
   ) async* {
     if (event is TakeAndProcessImageEvent) {
       yield ProcessImageLoadingState();
-
       try {
         final result = await purchaseUsecase.getSimilarity();
         yield ProcessImageLoadedState(
             similarity: result.similarity,
             textFromDb: result.textFromDb,
             file: result.imageFile,
-            textFromML: result.textFromMl);
+            textFromML: result.textFromMl, 
+            isShown: false);
       } catch (e) {
-        yield ProcessImageErrorState(message: e.toString());
+        yield ProcessImageErrorState(message: e.message.toString(), isShown: true);
       }
     }
   }

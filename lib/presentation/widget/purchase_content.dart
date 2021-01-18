@@ -20,7 +20,7 @@ class PurchaseScreenContent extends StatelessWidget {
     @required this.fileImage,
     @required this.similarity,
     @required this.textFromMl,
-    this.isShown,
+    @required this.isShown,
     this.message,
   }) : super(key: key);
 
