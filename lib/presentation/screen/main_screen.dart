@@ -2,7 +2,6 @@ import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_text_recognition/core/colors.dart';
-import 'package:flutter_text_recognition/presentation/bloc/main_screen/main_screen_bloc.dart';
 import 'package:flutter_text_recognition/presentation/bloc/pizza_history/pizza_history_bloc.dart';
 import 'package:flutter_text_recognition/presentation/bloc/scaner/scanner_bloc.dart';
 import 'package:flutter_text_recognition/presentation/screen/page/purchase_page.dart';
@@ -14,9 +13,8 @@ class Main extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(providers: [
       BlocProvider<PizzaHistoryBloc>(
-        create: (BuildContext context) => PizzaHistoryBloc(),
+        create: (BuildContext context) => PizzaHistoryBloc(sl()),
       ),
-      BlocProvider<MainScreenBloc>(create: (context) => sl()),
       BlocProvider<ScannerBloc>(create: (context) => sl())
     ], child: MainScreen());
   }
