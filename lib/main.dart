@@ -12,6 +12,7 @@ Future<void> main() async {
   print(hexToColor("#fbae0d").toString());
   runApp(MaterialApp(
       title: "Pizza App",
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         backgroundColor: appColorBackground,
         primaryColor: appColorSecondaryDarkBlue,
