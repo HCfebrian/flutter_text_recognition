@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:firebase_ml_vision/firebase_ml_vision.dart';
 import 'package:flutter_text_recognition/data/data_source/local/ml_kit_local/ml_kit_local_abs.dart';
+import 'package:flutter_text_recognition/data/model_converter/mlkit_full_text_normalization.dart';
 import 'package:meta/meta.dart';
 
 class MLKitPlatformImpl extends MLKitLocalAbs {
@@ -13,7 +14,9 @@ class MLKitPlatformImpl extends MLKitLocalAbs {
   Future<String> getFullText(File imageFile) async {
     final visionImage = FirebaseVisionImage.fromFile(imageFile);
     final visionText = await textRecognizer.processImage(visionImage);
-    return visionText.text;
+    print("full text: ");
+    print(normalizeReceiptText(visionText.text));
+    return normalizeReceiptText(visionText.text);
   }
 
   @override
@@ -26,20 +29,34 @@ class MLKitPlatformImpl extends MLKitLocalAbs {
         await textRecognizer.processImage(visionImage);
 
     try {
-      visionText.blocks.forEach((element) {
-        element.lines.forEach((element) {
-          final numberNotEmpty = num.tryParse(element.text);
-          if (element.text.length == 6 && numberNotEmpty != null) {
-            result = element.text;
+      for (int i = 0; i < visionText.blocks.length; i++) {
+        if (result != null) break;
+        for (int j = 0; j < visionText.blocks[i].lines.length; j++) {
+          if (result != null) break;
+          for (int k = 0;
+              k < visionText.blocks[i].lines[j].elements.length;
+              k++) {
+            if (visionText.blocks[i].lines[j].elements[k].text
+                .contains("#", 0)) {
+              result = visionText.blocks[i].lines[j].elements[k].text
+                  .replaceAll(RegExp('[^0-9]'), '');
+              break;
+            }
+            print("!!!! " + visionText.blocks[i].lines[j].text);
           }
-        });
-      });
-      print(result.length);
+          print(visionText.blocks[i].text);
+        }
+      }
+      print("ID " + result.toString());
     } catch (e) {
       print(e);
       throw Exception("iteration failed");
     }
+    if (result != null) {
+      return result;
+    } else {
+      throw Exception("Purchase ID not detected");
+    }
 
-    return result ?? "no result";
   }
 }
