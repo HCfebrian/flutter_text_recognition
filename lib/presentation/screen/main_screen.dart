@@ -101,7 +101,7 @@ class _MainScreenState extends State<MainScreen> {
                   ),
                 ),
                 body: Center(
-                  child: Text(1.toString()),
+                  child: Text("Home"),
                 ),
               ),
               Scaffold(
@@ -112,7 +112,7 @@ class _MainScreenState extends State<MainScreen> {
                 ),
                 body: Center(
                   child: Text(
-                    2.toString(),
+                    "Location"
                   ),
                 ),
               ),
@@ -123,7 +123,7 @@ class _MainScreenState extends State<MainScreen> {
                   ),
                 ),
                 body: Center(
-                  child: Text(3.toString()),
+                  child: Text("Cart"),
                 ),
               ),
               PurchaseScreen(),
@@ -135,7 +135,7 @@ class _MainScreenState extends State<MainScreen> {
                 ),
                 body: Center(
                   child: Text(
-                    5.toString(),
+                    "Profile"
                   ),
                 ),
               ),
