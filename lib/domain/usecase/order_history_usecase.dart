@@ -5,17 +5,17 @@ import 'package:flutter_text_recognition/domain/entity/pizza_entity.dart';
 import 'package:meta/meta.dart';
 
 class OrderHistoryUsecase {
-  final PizzaRepoAbs pizzaRepoAbs;
+  final PizzaRepoAbs pizzaRepo;
 
-  OrderHistoryUsecase({@required this.pizzaRepoAbs});
+  OrderHistoryUsecase({@required this.pizzaRepo});
 
   Stream<List<PizzaHistoryEntity>> getPizzaHistory() {
-    final result = pizzaRepoAbs.getStreamPizzaHistory();
+    final result = pizzaRepo.getStreamPizzaHistory();
     return result;
   }
 
   Future<void> closeStream() {
-    return pizzaRepoAbs.closePizzaHistoryStream();
+    return pizzaRepo.closePizzaHistoryStream();
   }
 
 

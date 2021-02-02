@@ -36,7 +36,7 @@ void init() {
 
   //UseCase
   sl.registerLazySingleton<OrderHistoryUsecase>(
-      () => OrderHistoryUsecase(pizzaRepoAbs: sl()));
+      () => OrderHistoryUsecase(pizzaRepo: sl()));
   sl.registerLazySingleton<PurchaseScanUsecase>(() => PurchaseScanUsecase(
         purchaseRepo: sl(),
         cameraRepoAbs: sl(),
