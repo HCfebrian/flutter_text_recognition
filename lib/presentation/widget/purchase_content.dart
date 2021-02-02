@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_text_recognition/core/colors.dart';
 import 'package:flutter_text_recognition/presentation/widget/dialog.dart';
 import 'package:flutter_text_recognition/presentation/widget/image_result.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
@@ -42,6 +43,7 @@ class PurchaseScreenContent extends StatelessWidget {
       ),
       panelBuilder: (ScrollController sc) {
         return Container(
+          color: appColorAccent0Gray,
           padding: EdgeInsets.only(left: 20, top: 10),
           child: ListView.builder(
               itemCount: 1,
