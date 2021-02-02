@@ -38,7 +38,6 @@ void init() {
   sl.registerLazySingleton<OrderHistoryUsecase>(
       () => OrderHistoryUsecase(pizzaRepoAbs: sl()));
   sl.registerLazySingleton<PurchaseScanUsecase>(() => PurchaseScanUsecase(
-        jaccard: sl(),
         purchaseRepo: sl(),
         cameraRepoAbs: sl(),
         mlkitRepoAbs: sl(),
