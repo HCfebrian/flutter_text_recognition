@@ -1,11 +1,11 @@
 import 'dart:io';
 
-import 'package:edit_distance/edit_distance.dart';
-
 import 'package:flutter_text_recognition/domain/contract_repository/camera_repo_abs.dart';
 import 'package:flutter_text_recognition/domain/contract_repository/mlkit_repo_abs.dart';
+import 'package:flutter_text_recognition/domain/contract_repository/pizza_repo_abs.dart';
 import 'package:flutter_text_recognition/domain/contract_repository/purchase_repo_abs.dart';
-import 'package:flutter_text_recognition/domain/entity/purchase_order.dart';
+import 'package:flutter_text_recognition/domain/contract_repository/similarity_repo_abs.dart';
+import 'package:flutter_text_recognition/domain/entity/purchase_entity.dart';
 import 'package:flutter_text_recognition/domain/entity/similarity_result.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:meta/meta.dart';
@@ -13,37 +13,29 @@ import 'package:meta/meta.dart';
 class PurchaseScanUsecase {
   final PurchaseRepoAbs purchaseRepo;
   final CameraRepoAbs cameraRepoAbs;
-  final Levenshtein levenshtein;
-  final Jaccard jaccard;
   final MLRepoAbs mlkitRepoAbs;
+  final SimilarityRepoAbs similarityRepo;
+  final PizzaRepoAbs pizzarepo;
 
   PurchaseScanUsecase({
+    @required this.pizzarepo,
     @required this.purchaseRepo,
     @required this.cameraRepoAbs,
-    @required this.levenshtein,
     @required this.mlkitRepoAbs,
-    @required this.jaccard,
+    @required this.similarityRepo,
   });
 
   Future<SimilarityResult> getSimilarity() async {
     File file;
-    String purchaseID, mlString;
+    String purchaseID, mlString, comparableDbText;
     PurchaseEntity resultDb;
 
     //get image
     try {
       file = await cameraRepoAbs.getImage(ImageSource.camera);
-      print("file : "+file.path);
+      print("file : " + file.path);
     } catch (_) {
       throw Exception("Camera Fail");
-    }
-
-    //get purchase id from Mlkit
-    try {
-      purchaseID = await mlkitRepoAbs.getPurchaseID(file);
-      print("purchaseID " + purchaseID.toString());
-    } catch (_) {
-      throw Exception("Faild to get PurchaseId");
     }
 
     //get full text using MLkit
@@ -53,31 +45,54 @@ class PurchaseScanUsecase {
       throw Exception("Failed to get Pic Text");
     }
 
+    //get purchase id from Mlkit
+    try {
+      purchaseID = await mlkitRepoAbs.getPurchaseID(file);
+      print("purchaseID " + purchaseID.toString());
+    } catch (e) {
+      print(e);
+      throw Exception("cannot get purchaseID");
+    }
+
     //get data from firebase
     try {
       resultDb = await purchaseRepo.getPurchaseDetail(purchaseID);
-      print("db text " + resultDb.fullText);
-    } catch (_) {
+    } catch (e) {
+      print(e);
       throw Exception("Failed to get db text");
     }
 
-    // get similarity
-    final similarity = levenshtein.distance(mlString, resultDb.fullText);
-    final jaccardSim = jaccard.normalizedDistance(
-        mlString.replaceAll(" ", "").replaceAll(".", "").replaceAll(",", ""),
-        resultDb.fullText
-            .replaceAll(" ", "")
-            .replaceAll(".", "")
-            .replaceAll(",", ""));
+    //get comparable string from resultDB
+    try {
+      comparableDbText = similarityRepo.getDbComparableText(
+          purchaseID: purchaseID,
+          workerName: resultDb.workerName,
+          workerId: resultDb.workerId,
+          purchaseDate: resultDb.purchaseDate,
+          purchaseTime: resultDb.purchaseTime,
+          listPizza: resultDb.listOrder,
+          subTotal: resultDb.subTotal,
+          balanceDue: resultDb.balanceDue);
+    } catch (e) {
+      throw Exception("failed compare data");
+    }
 
-    print("levenshtein " + similarity.toString());
-    print("jaccard " + jaccardSim.toString());
+    final similarityDistance = similarityRepo.getSimilarity(
+        databaseComparableText: comparableDbText,
+        scanImageComparableText: mlString);
+
+    print("jaccard " + similarityDistance.toString());
+
+    if (similarityDistance < 0.25) {
+      print("copy receipt");
+      pizzarepo.addReceiptToHistory(purchaseID);
+    }
 
     return SimilarityResult(
-      imageFile: file,
-      textFromDb: resultDb.fullText,
-      similarity: jaccardSim,
-      textFromMl: mlString,
+      purchaseID: purchaseID,
+      similarity: similarityDistance,
+      confirmed: (similarityDistance < 0.25),
+      cashback: resultDb.cashback,
     );
   }
 }
