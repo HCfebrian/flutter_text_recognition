@@ -20,7 +20,7 @@ class PurchaseScreen extends StatelessWidget {
       children: [
         Backdrop(color: appColorSecondaryDarkBlue),
         Scaffold(
-          backgroundColor: appColorBackground,
+          backgroundColor: Colors.transparent,
           appBar: AppBar(
             title: Center(
               child: Text("History"),
