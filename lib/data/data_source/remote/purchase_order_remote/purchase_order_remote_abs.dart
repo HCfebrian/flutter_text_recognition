@@ -1,4 +1,4 @@
-import 'package:flutter_text_recognition/domain/entity/purchase_order.dart';
+import 'package:flutter_text_recognition/domain/entity/purchase_entity.dart';
 
 abstract class PurchaseRemoteAbs {
   ///get multiple purchers from Remote
