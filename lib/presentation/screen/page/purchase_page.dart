@@ -201,7 +201,7 @@ class HistoryContent extends StatelessWidget {
                         style: TextStyle(
                             fontWeight: FontWeight.w600,
                             fontSize: 16,
-                            color: appColorAccent3Brown),
+                            color: appColorAccent0Gray),
                       ),
                     ),
                     Container(
