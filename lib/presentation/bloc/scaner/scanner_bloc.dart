@@ -1,4 +1,6 @@
 import 'dart:async';
+import 'dart:io';
+import 'dart:ui';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
@@ -18,10 +20,15 @@ class ScannerBloc extends Bloc<ScannerEvent, ScannerState> {
   Stream<ScannerState> mapEventToState(
     ScannerEvent event,
   ) async* {
+    if(event is SetCameraSizeEvent){
+      purchaseScanUsecase.setSize(event.size);
+    }
+
     if (event is ScanReceiptEvent) {
       yield ScannerInitial();
       try {
-        final result = await purchaseScanUsecase.getSimilarity();
+        final result = await purchaseScanUsecase.getSimilarity(
+            sourceFile: event.path, size: event.size);
         if (result.confirmed) {
           yield ScannerConfirmedState(result.cashback);
         } else {

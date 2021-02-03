@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:ui';
 
 import 'package:flutter_text_recognition/domain/contract_repository/camera_repo_abs.dart';
 import 'package:flutter_text_recognition/domain/contract_repository/mlkit_repo_abs.dart';
@@ -25,18 +26,27 @@ class PurchaseScanUsecase {
     @required this.similarityRepo,
   });
 
-  Future<SimilarityResult> getSimilarity() async {
+  bool setSize(Size size){
+    return mlkitRepoAbs.setCameraSize(size);
+  }
+
+  Future<SimilarityResult> getSimilarity({File sourceFile, Size size}) async {
     File file;
     String purchaseID, mlString, comparableDbText;
     PurchaseEntity resultDb;
 
     //get image
-    try {
-      file = await cameraRepoAbs.getImage(ImageSource.camera);
-      print("file : " + file.path);
-    } catch (_) {
-      throw Exception("Camera Fail");
+    if(sourceFile == null){
+      try {
+        file = await cameraRepoAbs.getImage(ImageSource.camera);
+        print("file : " + file.path);
+      } catch (_) {
+        throw Exception("Camera Fail");
+      }
+    }else{
+      file = sourceFile;
     }
+
 
     //get full text using MLkit
     try {
@@ -45,9 +55,11 @@ class PurchaseScanUsecase {
       throw Exception("Failed to get Pic Text");
     }
 
+
+
     //get purchase id from Mlkit
     try {
-      purchaseID = await mlkitRepoAbs.getPurchaseID(file);
+      purchaseID = await mlkitRepoAbs.getPurchaseID(imageFile: file, size: size);
       print("purchaseID " + purchaseID.toString());
     } catch (e) {
       print(e);
