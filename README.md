@@ -1,16 +1,42 @@
-# flutter_text_recognition
+Pizza Cashback feature using ML-kit text recognition
 
-A new Flutter application.
+# Project idea:
+- user buy pizza offline
+- user got receipt
+- user install the app and scan the receipt
+- user will get a cashback if the receipt is confirmed in database. 
 
-## Getting Started
+# Project structure :
+Clean Architecture.
 
-This project is a starting point for a Flutter application.
+there are 3 main layers
+- data
+- domain
+- presentation
 
-A few resources to get you started if this is your first Flutter project:
+### data layer
+data source from 3rd party library or the internet. 
+also handle conversion to entity.
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+### domain layer
+the business layer, manipulating pure entities through usecases.
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+### presentation layer
+containing only UI logic. don't add Bussines logic although there is BLoC in this layer. 
+all the bussines logic will be handle in domain layer. BLoC on this layer works only for state management.
+
+
+# Main Technology:
+
+### ML Kit -  text recognition
+use mlkit for extracting data from camera. for now we use offline text recognition.
+
+### Simple Text Mining
+since the text that we got from ML kit is still all over the place, we should mining the text to be something useful.
+this app contain simple text normalization and simple Text similarity using Jaccard algoritm.
+main challange in text mining on this app is to get Purchase ID and make comparable data with our online database.
+
+### Firestore database
+we store receipt data in firestore. data from firestore will be called and than we compare it with comparable data from text mining 
+
+
