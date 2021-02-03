@@ -1,17 +1,42 @@
 Pizza Cashback feature using ML-kit text recognition
 
-the app idea:
+# Project idea:
 - user buy pizza offline
 - user got receipt
 - user install the app and scan the receipt
 - user will get a cashback if the receipt is confirmed in database. 
 
-Project structure :
+# Project structure :
 Clean Architecture.
 
-there will be 3 main layer
+there are 3 main layers
 - data
 - domain
 - presentation
+
+### data layer
+data source from 3rd party library or the internet. 
+also handle conversion to entity.
+
+### domain layer
+the business layer, manipulating pure entities through usecases.
+
+### presentation layer
+containing only UI logic. don't add Bussines logic although there is BLoC in this layer. 
+all the bussines logic will be handle in domain layer. BLoC on this layer works only for state management.
+
+
+# Main Technology:
+
+### ML Kit -  text recognition
+use mlkit for extracting data from camera. for now we use offline text recognition.
+
+### Simple Text Mining
+since the text that we got from ML kit is still all over the place, we should mining the text to be something useful.
+this app contain simple text normalization and simple Text similarity using Jaccard algoritm.
+main challange in text mining on this app is to get Purchase ID and make comparable data with our online database.
+
+### Firestore database
+we store receipt data in firestore. data from firestore will be called and than we compare it with comparable data from text mining 
 
 
