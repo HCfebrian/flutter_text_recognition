@@ -5,6 +5,7 @@ Pizza Cashback feature using ML-kit text recognition
 - user got receipt
 - user install the app and scan the receipt
 - user will get a cashback if the receipt is confirmed in database. 
+- app download count goes stonks
 
 # Project structure :
 Clean Architecture.
@@ -30,6 +31,8 @@ all the bussines logic will be handle in domain layer. BLoC on this layer works 
 
 ### ML Kit -  text recognition
 use mlkit for extracting data from camera. for now we use offline text recognition.
+pelase use this image for testing.
+<img src="https://github.com/HCfebrian/portfolio/blob/master/appWeatherImage/appWeather.jpeg" width="200"/>
 
 ### Simple Text Mining
 since the text that we got from ML kit is still all over the place(a lot of noice and unnececery text), we should mining the text and trun it into something useful.
