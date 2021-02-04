@@ -30,7 +30,7 @@ all the bussines logic will be handle in domain layer. BLoC on this layer works 
 # Main Technology:
 
 ### ML Kit -  text recognition
-use mlkit for extracting data from camera. for now we use offline text recognition.
+use mlkit for extracting data from camera. for now we use offline text recognition. \n
 pelase use this image for testing.
 <img src="https://github.com/HCfebrian/flutter_text_recognition/blob/master/doc/Screen%20Shot%202021-01-28%20at%2010.34.22.png" width="200"/>
 
