@@ -16,7 +16,7 @@ there are 3 main layers
 
 ### data layer
 data source from 3rd party library or the internet. 
-also handle conversion to entity.
+this layer also handle conversion to entity.
 
 ### domain layer
 the business layer, manipulating pure entities through usecases.
@@ -32,7 +32,7 @@ all the bussines logic will be handle in domain layer. BLoC on this layer works 
 use mlkit for extracting data from camera. for now we use offline text recognition.
 
 ### Simple Text Mining
-since the text that we got from ML kit is still all over the place, we should mining the text to be something useful.
+since the text that we got from ML kit is still all over the place(a lot of noice and unnececery text), we should mining the text and trun it into something useful.
 this app contain simple text normalization and simple Text similarity using Jaccard algoritm.
 main challange in text mining on this app is to get Purchase ID and make comparable data with our online database.
 
