@@ -1,6 +1,6 @@
 import 'package:edit_distance/edit_distance.dart';
 import 'package:flutter_text_recognition/domain/contract_repository/similarity_repo_abs.dart';
-import 'package:flutter_text_recognition/domain/entity/pizza_entity.dart';
+import 'package:flutter_text_recognition/domain/entity/purchase_entity.dart';
 import 'package:meta/meta.dart';
 
 class SimilarityRepoImpl extends SimilarityRepoAbs {
@@ -9,21 +9,19 @@ class SimilarityRepoImpl extends SimilarityRepoAbs {
   SimilarityRepoImpl({@required this.jaccard});
 
   @override
-  String getDbComparableText(
-      {String purchaseID,
-      String workerName,
-      String workerId,
-      String purchaseDate,
-      String purchaseTime,
-      int subTotal,
-      int balanceDue,
-      List<PizzaHistoryEntity> listPizza}) {
+  String getDbComparableText({
+    PurchaseEntity purchaseEntity,
+  }) {
     String result;
     String textOrder = "";
     int orderNumber = 1;
-    result = purchaseID + workerName + workerId + purchaseDate + purchaseTime;
+    result = purchaseEntity.purchaseId +
+        purchaseEntity.workerName +
+        purchaseEntity.workerId +
+        purchaseEntity.purchaseDate +
+        purchaseEntity.purchaseTime;
 
-    listPizza.forEach((element) {
+    purchaseEntity.listOrder.forEach((element) {
       textOrder = textOrder + orderNumber.toString().padLeft(2, "0");
       textOrder = textOrder + "x" + element.purchaseQuantity;
       textOrder = textOrder + element.pizzaName;
@@ -32,7 +30,10 @@ class SimilarityRepoImpl extends SimilarityRepoAbs {
       orderNumber++;
     });
     print("textOrder " + textOrder);
-    result = result + textOrder + subTotal.toString() + balanceDue.toString();
+    result = result +
+        textOrder +
+        purchaseEntity.subTotal.toString() +
+        purchaseEntity.balanceDue.toString();
     print(result);
 
     return result;
