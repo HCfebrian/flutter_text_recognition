@@ -1,11 +1,14 @@
 import 'dart:io';
 
-import 'package:edit_distance/edit_distance.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:flutter_text_recognition/core/failure.dart';
 import 'package:flutter_text_recognition/domain/contract_repository/camera_repo_abs.dart';
 import 'package:flutter_text_recognition/domain/contract_repository/mlkit_repo_abs.dart';
+import 'package:flutter_text_recognition/domain/contract_repository/pizza_repo_abs.dart';
 import 'package:flutter_text_recognition/domain/contract_repository/purchase_repo_abs.dart';
-import 'package:flutter_text_recognition/domain/entity/purchase_order.dart';
+import 'package:flutter_text_recognition/domain/contract_repository/similarity_repo_abs.dart';
+import 'package:flutter_text_recognition/domain/entity/pizza_entity.dart';
+import 'package:flutter_text_recognition/domain/entity/purchase_entity.dart';
 import 'package:flutter_text_recognition/domain/entity/similarity_result.dart';
 import 'package:flutter_text_recognition/domain/usecase/purchase_scan_usecase.dart';
 import 'package:image_picker/image_picker.dart';
@@ -17,151 +20,218 @@ class MockCameraRepo extends Mock implements CameraRepoAbs {}
 
 class MockMLRepo extends Mock implements MLRepoAbs {}
 
-class MockLevenshtein extends Mock implements Levenshtein {}
+class MockSimilarityRepo extends Mock implements SimilarityRepoAbs {}
 
-class MockJaccard extends Mock implements Jaccard {}
+class MockPizzaRepo extends Mock implements PizzaRepoAbs {}
 
 void main() {
   MockCameraRepo mockCameraRepo;
   MockMLRepo mockMLRepo;
   MockPurchaseRepo mockPurchaseRepo;
-  Levenshtein mockLevenshtein;
-  Jaccard mockJaccard;
+  MockSimilarityRepo mockSimilarityRepo;
+  MockPizzaRepo mockPizzaRepo;
   PurchaseScanUsecase purchaseScanUsecase;
-  File testFile;
-  PurchaseEntity testPurchase;
-  SimilarityResult testSimilarity;
+
+  final testFile = File("android/storage/test/somthing.jpg");
+
+  final testReceiptId = "123456";
+
+  final testFullText =
+      "123456HERYAN69696911/01/20210435PM7201X2SUPERSUPREMEM02XBTALIANOBRUTALOXL99171";
+
+  final PizzaHistoryEntity pizzaHistoryEntity = PizzaHistoryEntity(
+      recipeId: "PZE45hViRDAWKzCCabS7",
+      purchaseId: "123456",
+      purchaseDate: "11/01/2021",
+      purchaseQuantity: "2",
+      pizzaName: "italinao pizza",
+      pizzaPrice: "72",
+      pizzaSize: "M",
+      pizzaCal: "34",
+      purchasePicUrl: "www.pizza.com/storage/test/somthing.jpg");
+
+  final PurchaseEntity testPurchaseEntity = PurchaseEntity(
+      listOrder: [pizzaHistoryEntity, pizzaHistoryEntity],
+      purchaseDate: "20/11/2012",
+      workerId: "696969",
+      workerName: "Heryan",
+      purchaseTime: "04.35 PM",
+      subTotal: 72,
+      balanceDue: 72,
+      cashback: 10,
+      purchaseId: "123456");
+
+  final testComparableDBText =
+      "123456HERYAN69696911/01/20210435PM01X2SUPERSUPREME72M02X3ITALIANOBRUTALO99XL171171";
+
+  final SimilarityResult testSimilarity = SimilarityResult(
+      similarity: 0.2,
+      confirmed: true,
+      purchaseID: testReceiptId,
+      cashback: testPurchaseEntity.cashback);
 
   setUp(() {
     mockCameraRepo = MockCameraRepo();
     mockMLRepo = MockMLRepo();
     mockPurchaseRepo = MockPurchaseRepo();
-    mockLevenshtein = Levenshtein();
-    mockJaccard = Jaccard();
-    testFile = File("android/storage/test");
+    mockSimilarityRepo = MockSimilarityRepo();
+    mockPizzaRepo = MockPizzaRepo();
 
     purchaseScanUsecase = PurchaseScanUsecase(
         purchaseRepo: mockPurchaseRepo,
         cameraRepoAbs: mockCameraRepo,
-        levenshtein: mockLevenshtein,
         mlkitRepoAbs: mockMLRepo,
-        jaccard: mockJaccard);
-
-    testPurchase = PurchaseEntity(
-        "20",
-        "description",
-        "item",
-        "lineTotal",
-        "purchaseOrderDate",
-        "quantity",
-        "shipTo",
-        "shippingMethod",
-        "shippingTerms",
-        "subTotal",
-        "tax",
-        "total",
-        "cost",
-        "vendor",
-        "purchaseId",
-        "fullText");
-
-    testSimilarity = SimilarityResult(
-        similarity: 1,
-        imageFile: testFile,
-        textFromDb: "fullText",
-        textFromMl: "fullText");
+        similarityRepo: mockSimilarityRepo,
+        pizzarepo: mockPizzaRepo);
   });
 
-  group("test getSimilarity usecase", () {
-    test("should return similarity index", () async {
-      //arrange
-      when(mockCameraRepo.getImage(any))
-          .thenAnswer((realInvocation) async => testFile);
-      when(mockMLRepo.getPurchaseID(testFile))
-          .thenAnswer((realInvocation) async => "123");
-      when(mockPurchaseRepo.getPurchaseDetail("123"))
-          .thenAnswer((realInvocation) async => testPurchase);
-      when(mockMLRepo.getFullText(testFile))
-          .thenAnswer((realInvocation) async => "fullText 2");
+  test("check are the data flow is correct", () async {
+    //arrange
+    when(mockCameraRepo.getImage(ImageSource.camera))
+        .thenAnswer((realInvocation) async => testFile);
 
-      //act
-      final result = await purchaseScanUsecase.getSimilarity();
-      //assert
-      expect(result, testSimilarity);
-    });
+    when(mockMLRepo.getFullText(testFile))
+        .thenAnswer((_) async => testFullText);
 
-    test("should throw camera error", () async {
-      //arrange
-      when(mockCameraRepo.getImage(any))
-          .thenThrow((realInvocation) async => Exception("any"));
-      when(mockMLRepo.getPurchaseID(testFile))
-          .thenAnswer((realInvocation) async => "123");
-      when(mockPurchaseRepo.getPurchaseDetail("123"))
-          .thenAnswer((realInvocation) async => testPurchase);
-      when(mockMLRepo.getFullText(testFile))
-          .thenAnswer((realInvocation) async => "fullText 2");
+    when(mockMLRepo.getPurchaseID(testFile))
+        .thenAnswer((_) async => testReceiptId);
 
-      //act
-      final result = purchaseScanUsecase.getSimilarity;
-      //assert
-      expect(() => result(), throwsException);
-    });
+    when(mockPurchaseRepo.getPurchaseDetail(testReceiptId))
+        .thenAnswer((_) async => testPurchaseEntity);
 
-    test("should throw purchesID error", () async {
-      //arrange
-      when(mockCameraRepo.getImage(any))
-          .thenAnswer((realInvocation) async => testFile);
-      when(mockMLRepo.getPurchaseID(testFile))
-          .thenThrow((realInvocation) async => Exception("any"));
-      when(mockPurchaseRepo.getPurchaseDetail("123"))
-          .thenAnswer((realInvocation) async => testPurchase);
-      when(mockMLRepo.getFullText(testFile))
-          .thenAnswer((realInvocation) async => "fullText 2");
+    when(mockSimilarityRepo.getDbComparableText(
+            purchaseEntity: testPurchaseEntity))
+        .thenAnswer((realInvocation) => testComparableDBText);
 
-      //act
-      final result = purchaseScanUsecase.getSimilarity;
-      //assert
-      expect(await mockCameraRepo.getImage(ImageSource.camera), testFile);
-      expect(() => result(), throwsException);
-    });
+    when(mockSimilarityRepo.getSimilarity(
+            databaseComparableText: testComparableDBText,
+            scanImageComparableText: testFullText))
+        .thenReturn(0.2);
 
-    test("should throw fullString error", () async {
-      //arrange
-      when(mockCameraRepo.getImage(any))
-          .thenAnswer((realInvocation) async => testFile);
-      when(mockMLRepo.getPurchaseID(testFile))
-          .thenAnswer((realInvocation) async => "123");
-      when(mockPurchaseRepo.getPurchaseDetail("123"))
-          .thenThrow((realInvocation) async => Exception());
-      when(mockMLRepo.getFullText(testFile))
-          .thenAnswer((realInvocation) async => "fullText 2");
+    //act
+    final result = await purchaseScanUsecase.getSimilarity();
+    //assert
+    expect(result, testSimilarity);
+  });
 
-      //act
-      final result = purchaseScanUsecase.getSimilarity;
-      //assert
-      expect(await mockCameraRepo.getImage(ImageSource.camera), testFile);
-      expect(await mockMLRepo.getPurchaseID(testFile), "123");
-      expect(() => result(), throwsException);
-    });
+  test(
+      "should throw camera exception, and no other transaction should be called",
+      () async {
+    //arrange
+    when(mockCameraRepo.getImage(any)).thenThrow((_) async => Exception("any"));
+    //act
+    final result = purchaseScanUsecase.getSimilarity;
+    //assert
+    expect(() => result(), throwsA(isA<CameraException>()));
+    verifyZeroInteractions(mockMLRepo);
+    verifyZeroInteractions(mockPurchaseRepo);
+    verifyZeroInteractions(mockSimilarityRepo);
+    verifyZeroInteractions(mockPizzaRepo);
+  });
 
-    test("should throw fullTextError", () async {
-      //arrange
-      when(mockCameraRepo.getImage(any))
-          .thenAnswer((realInvocation) async => testFile);
-      when(mockMLRepo.getPurchaseID(testFile))
-          .thenAnswer((realInvocation) async => "123");
-      when(mockPurchaseRepo.getPurchaseDetail("123"))
-          .thenAnswer((realInvocation) async => testPurchase);
-      when(mockMLRepo.getFullText(testFile))
-          .thenThrow((realInvocation) async => Exception());
+  test("should throw ML exception, and no other transaction should be called",
+      () async {
+    //arrange
+    when(mockCameraRepo.getImage(any)).thenAnswer((_) async => testFile);
+    when(mockMLRepo.getFullText(testFile))
+        .thenThrow((_) async => Exception("any"));
+    //act
+    final result = purchaseScanUsecase.getSimilarity;
+    //assert
+    expect(() => result(), throwsA(isA<MLException>()));
 
-      //act
-      final result = purchaseScanUsecase.getSimilarity;
-      //assert
-      expect(await mockCameraRepo.getImage(ImageSource.camera), testFile);
-      expect(await mockMLRepo.getPurchaseID(testFile), "123");
-      expect(await mockPurchaseRepo.getPurchaseDetail("123"), testPurchase);
-      expect(() => result(), throwsException);
-    });
+    // todo: for unknown reason this doesn't work.
+    verifyNoMoreInteractions(mockMLRepo);
+    verifyZeroInteractions(mockMLRepo);
+    verifyZeroInteractions(mockPurchaseRepo);
+    verifyZeroInteractions(mockSimilarityRepo);
+    verifyZeroInteractions(mockPizzaRepo);
+  });
+
+  test("should throw ML exception, and no other transaction should be called",
+      () async {
+    //arrange
+    when(mockCameraRepo.getImage(any)).thenAnswer((_) async => testFile);
+    when(mockMLRepo.getFullText(testFile)).thenAnswer((_) async => testFullText);
+    when(mockMLRepo.getPurchaseID(testFile))
+        .thenThrow((_) async => Exception("any"));
+    //act
+    final result = purchaseScanUsecase.getSimilarity;
+    //assert
+    expect(() => result(), throwsA(isA<MLException>()));
+
+    // todo: for unknown reason this doesn't work.
+    verifyZeroInteractions(mockMLRepo);
+
+    verifyZeroInteractions(mockPurchaseRepo);
+    verifyZeroInteractions(mockSimilarityRepo);
+    verifyZeroInteractions(mockPizzaRepo);
+  });
+
+  test(
+      "should throw Firebase exception, and no other transaction should be called",
+      () async {
+    //arrange
+    when(mockCameraRepo.getImage(any)).thenAnswer((_) async => testFile);
+    when(mockMLRepo.getFullText(testFile)).thenAnswer((_) async => testFullText);
+    when(mockMLRepo.getPurchaseID(testFile)).thenAnswer((_) async => testReceiptId);
+    when(mockPurchaseRepo.getPurchaseDetail(testReceiptId))
+        .thenThrow(() async => Exception("any"));
+
+    //act
+    final result = purchaseScanUsecase.getSimilarity;
+    //assert
+    expect(() => result(), throwsA(isA<FirebaseException>()));
+    verifyZeroInteractions(mockPurchaseRepo);
+    verifyZeroInteractions(mockSimilarityRepo);
+    verifyZeroInteractions(mockPizzaRepo);
+  });
+
+  test(
+      "should throw Similarity exception, and no other transaction should be called",
+      () async {
+    //arrange
+    when(mockCameraRepo.getImage(any)).thenAnswer((_) async => testFile);
+    when(mockMLRepo.getFullText(testFile)).thenAnswer((_) async => testFullText);
+    when(mockMLRepo.getPurchaseID(testFile)).thenAnswer((_) async => testReceiptId);
+    when(mockPurchaseRepo.getPurchaseDetail(testReceiptId))
+        .thenAnswer((_) async => testPurchaseEntity);
+    when(mockSimilarityRepo.getDbComparableText(
+            purchaseEntity: testPurchaseEntity))
+        .thenThrow((_) async => Exception("any"));
+
+    //act
+    final result = purchaseScanUsecase.getSimilarity;
+    //assert
+    expect(() => result(), throwsA(isA<SimilarityException>()));
+    verifyZeroInteractions(mockPurchaseRepo);
+    verifyZeroInteractions(mockSimilarityRepo);
+    verifyZeroInteractions(mockPizzaRepo);
+  });
+
+  test(
+      "should throw Similarity exception, and no other transaction should be called",
+      () async {
+    //arrange
+    when(mockCameraRepo.getImage(any)).thenAnswer((_) async => testFile);
+    when(mockMLRepo.getFullText(testFile)).thenAnswer((_) async => testFullText);
+    when(mockMLRepo.getPurchaseID(any)).thenAnswer((_) async => testReceiptId);
+    when(mockPurchaseRepo.getPurchaseDetail(testReceiptId))
+        .thenAnswer((_) async => testPurchaseEntity);
+    when(mockSimilarityRepo.getDbComparableText(
+            purchaseEntity: testPurchaseEntity))
+        .thenReturn(testComparableDBText);
+    when(mockSimilarityRepo.getSimilarity(
+      scanImageComparableText: testFullText,
+      databaseComparableText: testComparableDBText,
+    )).thenThrow((_) async => Exception("any"));
+
+    //act
+    final result = purchaseScanUsecase.getSimilarity;
+    //assert
+    expect(() => result(), throwsA(isA<SimilarityException>()));
+    verifyZeroInteractions(mockPurchaseRepo);
+    verifyZeroInteractions(mockSimilarityRepo);
+    verifyZeroInteractions(mockPizzaRepo);
   });
 }
