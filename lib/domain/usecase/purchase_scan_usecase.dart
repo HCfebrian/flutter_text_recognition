@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter_text_recognition/core/failure.dart';
 import 'package:flutter_text_recognition/domain/contract_repository/camera_repo_abs.dart';
 import 'package:flutter_text_recognition/domain/contract_repository/mlkit_repo_abs.dart';
 import 'package:flutter_text_recognition/domain/contract_repository/pizza_repo_abs.dart';
@@ -29,63 +30,74 @@ class PurchaseScanUsecase {
     File file;
     String purchaseID, mlString, comparableDbText;
     PurchaseEntity resultDb;
+    double similarityDistance;
 
     //get image
     try {
       file = await cameraRepoAbs.getImage(ImageSource.camera);
       print("file : " + file.path);
     } catch (_) {
-      throw Exception("Camera Fail");
+      throw CameraException("Camera Fail");
     }
 
     //get full text using MLkit
     try {
+      print("get full text called");
       mlString = await mlkitRepoAbs.getFullText(file);
+      print("get full text returned " + mlString);
     } catch (_) {
-      throw Exception("Failed to get Pic Text");
+      throw MLException("Failed to get Pic Text");
     }
 
     //get purchase id from Mlkit
     try {
+      print("get purchase id called");
       purchaseID = await mlkitRepoAbs.getPurchaseID(file);
       print("purchaseID " + purchaseID.toString());
     } catch (e) {
       print(e);
-      throw Exception("cannot get purchaseID");
+      throw MLException("cannot get purchaseID");
     }
 
     //get data from firebase
     try {
+      print("get purchase called");
       resultDb = await purchaseRepo.getPurchaseDetail(purchaseID);
+      print("get purchase returned " + resultDb.workerName);
     } catch (e) {
       print(e);
-      throw Exception("Failed to get db text");
+      throw FirebaseException("Failed to get db text");
     }
 
     //get comparable string from resultDB
     try {
+      print("get dbComparable Text called");
       comparableDbText = similarityRepo.getDbComparableText(
-          purchaseID: purchaseID,
-          workerName: resultDb.workerName,
-          workerId: resultDb.workerId,
-          purchaseDate: resultDb.purchaseDate,
-          purchaseTime: resultDb.purchaseTime,
-          listPizza: resultDb.listOrder,
-          subTotal: resultDb.subTotal,
-          balanceDue: resultDb.balanceDue);
-    } catch (e) {
-      throw Exception("failed compare data");
+        purchaseEntity: resultDb,
+      );
+      print("comparable DB text " + comparableDbText);
+    } catch (_) {
+      throw SimilarityException("failed while comparing the data");
     }
 
-    final similarityDistance = similarityRepo.getSimilarity(
-        databaseComparableText: comparableDbText,
-        scanImageComparableText: mlString);
+    // compare two string from db and mlkit
+    try {
+      similarityDistance = similarityRepo.getSimilarity(
+          databaseComparableText: comparableDbText,
+          scanImageComparableText: mlString);
+      print("jaccard " + similarityDistance.toString());
+    } catch (_) {
+      throw SimilarityException("Cannot get Similarity Distance");
+    }
 
-    print("jaccard " + similarityDistance.toString());
-
+    // if similarity distance smaller than 0.25, update user pizza history
     if (similarityDistance < 0.25) {
-      print("copy receipt");
-      pizzarepo.addReceiptToHistory(purchaseID);
+      try {
+        print("Update database");
+        pizzarepo.addReceiptToHistory(purchaseID);
+      } catch (_) {
+        throw FirebaseException("Error while update database");
+      }
     }
 
     return SimilarityResult(
