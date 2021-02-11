@@ -1,3 +1,16 @@
+<div style="text-align: center">
+    <table>
+        <tr>
+            <td style="text-align: center">
+                <a href="">
+                    <img src="https://github.com/HCfebrian/flutter_text_recognition/blob/master/assets/images/photo_2021-02-11_12-03-49.jpg" width="200"/>
+                </a>
+            </td>            
+            </tr>
+     </table>
+</div>
+
+
 Pizza Cashback feature using ML-kit text recognition
 
 # Project idea:
