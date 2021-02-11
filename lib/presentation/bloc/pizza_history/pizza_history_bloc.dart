@@ -5,7 +5,6 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_text_recognition/domain/entity/pizza_entity.dart';
 import 'package:flutter_text_recognition/domain/usecase/order_history_usecase.dart';
-import 'package:flutter_text_recognition/domain/usecase/purchase_scan_usecase.dart';
 import 'package:meta/meta.dart';
 
 
@@ -39,6 +38,10 @@ class PizzaHistoryBloc extends Bloc<PizzaHistoryEvent, PizzaHistoryState> {
 
     if (event is PizzaHistoryShowList) {
       yield PizzaHistoryLoadedState(listPizza: event.listPizza);
+    }
+
+    if(event is PizzaHistoryDeleteEvent){
+      orderUsecase.deletePizzaHistory(documentID: event.documentID);
     }
   }
 }

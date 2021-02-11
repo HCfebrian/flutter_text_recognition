@@ -6,14 +6,14 @@ import 'package:flutter_text_recognition/data/model_converter/pizza_converter.da
 import 'package:flutter_text_recognition/domain/entity/pizza_entity.dart';
 
 class PizzaHistoryDataSourceImpl extends PizzaHistoryDataSourceAbs {
-  final FirebaseFirestore firebasFirestore;
+  final FirebaseFirestore firebaseFirestore;
 
   final _controller = StreamController<List<PizzaHistoryEntity>>();
 
   Stream<List<PizzaHistoryEntity>> get _stream => _controller.stream;
 
-  PizzaHistoryDataSourceImpl(this.firebasFirestore) {
-    firebasFirestore
+  PizzaHistoryDataSourceImpl(this.firebaseFirestore) {
+    firebaseFirestore
         .collection("order_history/PZE45hViRDAWKzCCabS7/order_collection")
         .snapshots()
         .listen((event) {
@@ -40,20 +40,27 @@ class PizzaHistoryDataSourceImpl extends PizzaHistoryDataSourceAbs {
 
   @override
   Future<bool> addReceiptToHistory(String receiptId) async {
-    final CollectionReference collectionReceiptRef = firebasFirestore
+    final CollectionReference collectionReceiptRef = firebaseFirestore
         .collection("purchase_history/$receiptId/order_collection");
-    final CollectionReference collectionHistoryRef = firebasFirestore
+    final CollectionReference collectionHistoryRef = firebaseFirestore
         .collection("order_history/PZE45hViRDAWKzCCabS7/order_collection");
     collectionReceiptRef.snapshots().forEach(
       (element) {
         element.docs.forEach(
           (element) {
-            print("document id"+ element.id);
+            print("document id" + element.id);
             collectionHistoryRef.doc(element.id).set(element.data());
           },
         );
       },
     );
     return true;
+  }
+
+  @override
+  void deletePizzaHistory({String documentId}) {
+    firebaseFirestore
+        .doc("/order_history/PZE45hViRDAWKzCCabS7/order_collection/$documentId")
+        .delete();
   }
 }

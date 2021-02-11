@@ -18,5 +18,9 @@ class OrderHistoryUsecase {
     return pizzaRepo.closePizzaHistoryStream();
   }
 
+  void deletePizzaHistory({String documentID}){
+    pizzaRepo.deletePizzaHistory(documentID: documentID);
+  }
+
 
 }

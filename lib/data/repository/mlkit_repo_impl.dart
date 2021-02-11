@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:ui';
 
 
 import 'package:flutter_text_recognition/data/data_source/local/ml_kit_local/ml_kit_local_abs.dart';
@@ -11,12 +12,17 @@ class MLKitRepoImpl extends MLRepoAbs {
   MLKitRepoImpl({@required this.mlKit});
 
   @override
-  Future<String> getPurchaseID(File imageFile) async {
-    return await mlKit.getPurchaseId(imageFile);
+  Future<String> getPurchaseID({File imageFile, Size size}) async {
+    return await mlKit.getPurchaseId(imageFile: imageFile, size: size);
   }
 
   @override
   Future< String> getFullText(File imageFile) async {
       return await mlKit.getFullText(imageFile);
+  }
+
+  @override
+  bool setCameraSize(Size size) {
+    return mlKit.setCameraSize(size);
   }
 }

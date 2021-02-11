@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_text_recognition/core/colors.dart';
@@ -5,6 +7,7 @@ import 'package:flutter_text_recognition/domain/entity/pizza_entity.dart';
 import 'package:flutter_text_recognition/presentation/bloc/pizza_history/pizza_history_bloc.dart';
 import 'package:flutter_text_recognition/presentation/bloc/scaner/scanner_bloc.dart';
 import 'package:flutter_text_recognition/presentation/widget/backdrop_widget.dart';
+import 'package:flutter_text_recognition/presentation/widget/custom_camera.dart';
 import 'package:flutter_text_recognition/presentation/widget/horizontal_card_loading.dart';
 import 'package:flutter_text_recognition/presentation/widget/horizontal_pizza_card.dart';
 import 'package:implicitly_animated_reorderable_list/implicitly_animated_reorderable_list.dart';
@@ -144,9 +147,13 @@ class HistoryContent extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<PizzaHistoryBloc, PizzaHistoryState>(
       builder: (context, state) {
+        print("size :");
+        print(MediaQuery.of(context).size.width);
+        print(MediaQuery.of(context).size.height);
         if (state is PizzaHistoryInitialState) {
           return Container();
         }
+
         if (state is PizzaHistoryLoadingState) {
           return ListView.builder(
               itemCount: 10 + 1,
@@ -207,9 +214,26 @@ class HistoryContent extends StatelessWidget {
                     Container(
                       margin: EdgeInsets.symmetric(vertical: 10),
                       child: RaisedButton(
-                        onPressed: () {
-                          BlocProvider.of<ScannerBloc>(context)
-                              .add(ScanReceiptEvent());
+                        onPressed: () async {
+                          // BlocProvider.of<ScannerBloc>(context)
+                          //     .add(ScanReceiptEvent());
+
+                          final File val = await Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => CustomCamera(),
+                            ),
+                          );
+
+                          print("Size media query" +
+                              MediaQuery.of(context).size.toString());
+                          BlocProvider.of<ScannerBloc>(context).add(
+                              ScanReceiptEvent(
+                                  path: val,
+                                  size: MediaQuery.of(context).size));
+                          print("directory val:");
+                          print(val.parent.path);
+                          print("path val:");
+                          print(val.path);
                         },
                         child: Text(
                           "Scan Your Receipt",
@@ -240,12 +264,19 @@ class HistoryContent extends StatelessWidget {
                             pizzaPicUrl: item.purchasePicUrl,
                             pizzaPrice: item.pizzaPrice,
                             purchaseQuantity: item.purchaseQuantity,
+                            onPress: () {
+                              BlocProvider.of<PizzaHistoryBloc>(context).add(
+                                  PizzaHistoryDeleteEvent(
+                                      documentID: item.purchaseId));
+                              Navigator.pop(context);
+                            },
                           ));
                     },
                     removeItemBuilder: (context, animation, oldItem) {
                       return FadeTransition(
                         opacity: animation,
                         child: HorizontalPizzaCard(
+                          onPress: () {},
                           pizzaCal: oldItem.pizzaCal,
                           purchaseDate: oldItem.purchaseDate,
                           pizzaName: oldItem.pizzaName,
