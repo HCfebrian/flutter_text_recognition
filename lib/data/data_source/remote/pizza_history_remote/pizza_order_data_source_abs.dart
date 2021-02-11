@@ -7,4 +7,5 @@ abstract class PizzaHistoryDataSourceAbs {
   Stream<List<PizzaHistoryEntity>> getPizzaHistoryStream();
   Future<void> closePizzaHistoryStream();
   Future<void> addReceiptToHistory(String documentId);
+  void deletePizzaHistory({String documentId});
 }

@@ -4,7 +4,6 @@ import 'package:flutter_text_recognition/presentation/screen/main_screen.dart';
 
 class RouteGenerator {
   static Route<dynamic> generateRoute(RouteSettings settings) {
-    final args = settings.arguments;
 
     switch (settings.name) {
       case "/":

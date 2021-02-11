@@ -224,9 +224,12 @@ class HistoryContent extends StatelessWidget {
                             ),
                           );
 
-                          print( "Size media query"+ MediaQuery.of(context).size.toString());
-                          BlocProvider.of<ScannerBloc>(context)
-                              .add(ScanReceiptEvent(path: val, size: MediaQuery.of(context).size));
+                          print("Size media query" +
+                              MediaQuery.of(context).size.toString());
+                          BlocProvider.of<ScannerBloc>(context).add(
+                              ScanReceiptEvent(
+                                  path: val,
+                                  size: MediaQuery.of(context).size));
                           print("directory val:");
                           print(val.parent.path);
                           print("path val:");
@@ -261,12 +264,19 @@ class HistoryContent extends StatelessWidget {
                             pizzaPicUrl: item.purchasePicUrl,
                             pizzaPrice: item.pizzaPrice,
                             purchaseQuantity: item.purchaseQuantity,
+                            onPress: () {
+                              BlocProvider.of<PizzaHistoryBloc>(context).add(
+                                  PizzaHistoryDeleteEvent(
+                                      documentID: item.purchaseId));
+                              Navigator.pop(context);
+                            },
                           ));
                     },
                     removeItemBuilder: (context, animation, oldItem) {
                       return FadeTransition(
                         opacity: animation,
                         child: HorizontalPizzaCard(
+                          onPress: () {},
                           pizzaCal: oldItem.pizzaCal,
                           purchaseDate: oldItem.purchaseDate,
                           pizzaName: oldItem.pizzaName,

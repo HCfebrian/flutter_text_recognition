@@ -24,4 +24,9 @@ class PizzaRepoImpl extends PizzaRepoAbs {
   Future<bool> addReceiptToHistory(String documentId) {
      return pizzaDataSource.addReceiptToHistory(documentId);
   }
+
+  @override
+  void deletePizzaHistory({String documentID}) {
+     pizzaDataSource.deletePizzaHistory(documentId: documentID);
+  }
 }
