@@ -9,15 +9,18 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   di.init();
-  print(hexToColor("#fbae0d").toString());
-  runApp(MaterialApp(
-      title: "Pizza App",
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        backgroundColor: appColorBackground,
-        primaryColor: appColorSecondaryDarkBlue,
-        accentColor: appColorPrimaryYellow
-      ),
-      initialRoute: "/",
-      onGenerateRoute: RouteGenerator.generateRoute));
+  print(
+    hexToColor("#fbae0d").toString(),
+  );
+  runApp(
+    MaterialApp(
+        title: "Pizza App",
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+            backgroundColor: appColorBackground,
+            primaryColor: appColorSecondaryDarkBlue,
+            accentColor: appColorPrimaryYellow),
+        initialRoute: "/",
+        onGenerateRoute: RouteGenerator.generateRoute),
+  );
 }
