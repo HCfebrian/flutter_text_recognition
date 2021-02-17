@@ -25,27 +25,25 @@ dependencies:
     sdk: flutter
 
   # must have
-  cloud_firestore: ^0.14.4
+  cloud_firestore: 0.16.0
   get_it: ^5.0.4
   data_connection_checker: ^0.3.4
   flutter_bloc: ^6.1.1
-  firebase_core: ^0.5.3
+  firebase_core: ^0.7.0
   equatable: ^1.2.5
 
   # optional
-  firebase_ml_vision: ^0.9.10
+  firebase_ml_vision: ^0.10.0
   edit_distance: ^0.4.1
   curved_navigation_bar: ^0.3.7
   shimmer: ^1.1.2
   implicitly_animated_reorderable_list: ^0.3.2
-
-
+  intl: ^0.16.1
 
   #  dartz: ^0.9.1
   image_picker: ^0.6.7+17
   #  camera: ^0.6.4+5
   camera_camera: ^1.0.34+1
-
 
   # not necessary i just want to try it
   sliding_up_panel: ^1.0.2

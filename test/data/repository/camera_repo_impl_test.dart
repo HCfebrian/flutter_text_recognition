@@ -1,8 +1,8 @@
 import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:flutter_text_recognition/data/data_source/local/camera_platform/camera_platform_abs.dart';
-import 'package:flutter_text_recognition/data/repository/canera_repo_impl.dart';
+import 'package:flutter_text_recognition/feature/history/data/data_source/local/camera/camera_platform_abs.dart';
+import 'package:flutter_text_recognition/feature/history/data/repo/canera_repo_impl.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mockito/mockito.dart';
 
