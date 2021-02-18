@@ -10,8 +10,6 @@ import 'package:flutter_text_recognition/feature/history/presentation/widget/bac
 import 'package:flutter_text_recognition/feature/history/presentation/widget/custom_camera.dart';
 import 'package:flutter_text_recognition/feature/history/presentation/widget/horizontal_card_loading.dart';
 import 'package:flutter_text_recognition/feature/history/presentation/widget/horizontal_pizza_card.dart';
-import 'package:flutter_text_recognition/feature/profile/presentation/bloc/scan_ktp_bloc.dart';
-import 'package:flutter_text_recognition/feature/profile/presentation/screen/edit_profile_screen.dart';
 import 'package:implicitly_animated_reorderable_list/implicitly_animated_reorderable_list.dart';
 import 'package:implicitly_animated_reorderable_list/transitions.dart';
 

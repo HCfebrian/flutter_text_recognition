@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter_text_recognition/feature/profile/domain/entity/user_data_entity.dart';
 import 'package:flutter_text_recognition/feature/profile/domain/usecase/scan_ktp_usecase.dart';
 import 'package:meta/meta.dart';
 
@@ -19,7 +20,11 @@ class ScanKtpBloc extends Bloc<ScanKtpEvent, ScanKtpState> {
   ) async* {
     if(event is ScanKtpInputEvent){
       print("lol");
-      scanKtpUsecase.getUserData(event.fileImage);
+      yield ScanKtpInitial();
+      final result = await scanKtpUsecase.getUserData(event.fileImage);
+      if(result != null){
+        yield ScanKtpSuccessState(userData: result);
+      }
     }
   }
 }

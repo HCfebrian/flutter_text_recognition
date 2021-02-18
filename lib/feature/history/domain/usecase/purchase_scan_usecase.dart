@@ -46,15 +46,12 @@ class PurchaseScanUsecase {
       file = sourceFile;
     }
 
-
     //get full text using MLkit
     try {
       mlString = await mlkitRepoAbs.getFullText(file);
     } catch (_) {
       throw Exception("Failed to get Pic Text");
     }
-
-
 
     //get purchase id from Mlkit
     try {

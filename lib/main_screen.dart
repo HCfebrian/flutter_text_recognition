@@ -1,14 +1,8 @@
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_text_recognition/core/colors.dart';
-import 'package:flutter_text_recognition/feature/history/presentation/bloc/pizza_history/pizza_history_bloc.dart';
-import 'package:flutter_text_recognition/feature/history/presentation/bloc/scaner/scanner_bloc.dart';
 import 'package:flutter_text_recognition/feature/history/presentation/screen/purchase_page.dart';
-import 'package:flutter_text_recognition/feature/profile/presentation/bloc/scan_ktp_bloc.dart';
-import 'package:flutter_text_recognition/feature/profile/presentation/screen/edit_profile_screen.dart';
 import 'package:flutter_text_recognition/feature/profile/presentation/screen/profile_screen.dart';
-import 'package:flutter_text_recognition/injection_container.dart';
 
 
 class MainScreen extends StatefulWidget {

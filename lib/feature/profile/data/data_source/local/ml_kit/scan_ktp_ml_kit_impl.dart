@@ -19,11 +19,11 @@ class ScanKtpMlKitImpl implements ScanKtpMlKitAbs {
     print("ktp");
     print(visionText.text);
 
-    String nameResult;
-    String alamatResult;
-    String tglLahirResult;
-    String agamaResult;
-    String statusKawinResult;
+    String nameResult = "";
+    String alamatResult = "";
+    String tglLahirResult = "";
+    String agamaResult = "";
+    String statusKawinResult = "";
 
     Rect namaRect;
     Rect alamatRect;
@@ -43,38 +43,43 @@ class ScanKtpMlKitImpl implements ScanKtpMlKitAbs {
                 " " +
                 data.boundingBox.toString());
 
-            if (data.text.toLowerCase() == "nama") {
+            if (data.text.toLowerCase() == "nama" ||
+                data.text.toLowerCase() == "nema" ||
+                data.text.toLowerCase() == "name") {
               final temp = data.boundingBox;
-              namaRect = Rect.fromLTRB(
-                  temp.left, temp.top + 5, temp.right, temp.bottom + 5);
+              namaRect =
+                  Rect.fromLTRB(temp.left, temp.top, temp.right, temp.bottom);
               print("nama run");
             }
 
-            if (data.text.toLowerCase().trim() == "lahir") {
+            if (data.text.toLowerCase().trim() == "lahir" ||
+                data.text.toLowerCase().trim() == "tempat" ||
+                data.text.toLowerCase().trim() == "tempat/tgl") {
               final temp = data.boundingBox;
-              tanggalLahirRect = Rect.fromLTRB(
-                  temp.left, temp.top + 5, temp.right, temp.bottom + 5);
+              tanggalLahirRect =
+                  Rect.fromLTRB(temp.left, temp.top, temp.right, temp.bottom);
               print("tgllahir run");
             }
 
             if (data.text.toLowerCase().trim() == "alamat") {
               final temp = data.boundingBox;
-              alamatRect = Rect.fromLTRB(
-                  temp.left, temp.top + 5, temp.right, temp.bottom + 5);
+              alamatRect =
+                  Rect.fromLTRB(temp.left, temp.top, temp.right, temp.bottom);
               print("alamat run");
             }
 
             if (data.text.toLowerCase().trim() == "agama") {
               final temp = data.boundingBox;
-              agamaRect = Rect.fromLTRB(
-                  temp.left, temp.top + 5, temp.right, temp.bottom + 5);
+              agamaRect =
+                  Rect.fromLTRB(temp.left, temp.top, temp.right, temp.bottom);
               print("agama run");
             }
 
-            if (data.text.toLowerCase().trim() == "perkawinan") {
+            if (data.text.toLowerCase().trim() == "perkawinan" ||
+                data.text.toLowerCase().trim() == "perkawinan:") {
               final temp = data.boundingBox;
-              statusKawinRect = Rect.fromLTRB(
-                  temp.left, temp.top + 5, temp.right, temp.bottom + 5);
+              statusKawinRect =
+                  Rect.fromLTRB(temp.left, temp.top, temp.right, temp.bottom);
               print("statusKawin run");
             }
           }
@@ -85,34 +90,102 @@ class ScanKtpMlKitImpl implements ScanKtpMlKitAbs {
       throw Exception("iteration failed");
     }
 
+    print("nama rect " + namaRect.toString());
+    print("alamat rect " + alamatRect.toString());
+    print("tanggalLahir rect " + tanggalLahirRect.toString());
+    print("agama rect " + agamaRect.toString());
+    print("statusKawin rect " + statusKawinRect.toString());
+
     try {
       for (int i = 0; i < visionText.blocks.length; i++) {
         for (int j = 0; j < visionText.blocks[i].lines.length; j++) {
           final data = visionText.blocks[i].lines[j];
-          if (isInside(data.boundingBox, namaRect)) {
-            nameResult = data.text;
-            print("------ name");
-            print(nameResult);
+
+          if (isInside3rect(
+              isThisRect: data.boundingBox,
+              isInside: namaRect,
+              andAbove: tanggalLahirRect)) {
+            if (data.text.toLowerCase() != "nama") {
+              nameResult = (nameResult + " " + data.text)
+                  .replaceAll("Nema", "")
+                  .replaceAll(":", "")
+                  .trim();
+              print("------ name");
+              print(nameResult);
+            }
           }
-          if (isInside(data.boundingBox, alamatRect)) {
-            alamatResult = data.text;
-            print("------ alamat");
-            print(alamatResult);
+          if (namaRect == null) {
+            print("namaRect null bosku");
           }
+
+          if (isInside3rect(
+              isThisRect: data.boundingBox,
+              isInside: alamatRect,
+              andAbove: agamaRect)) {
+            if (data.text.toLowerCase() != "alamat") {
+              alamatResult = alamatResult + " " + data.text;
+              alamatResult = alamatResult
+                  .replaceAll("Kecamatan", "")
+                  .replaceAll("RTIRW", "")
+                  .replaceAll("RT/RW", "")
+                  .replaceAll(":", "")
+                  .replaceAll("Kel/Desa", "")
+                  .replaceAll("KeVDesa", "")
+                  .replaceAll("KeVDes", "")
+                  .replaceAll("Kei/Desa", "")
+                  .replaceAll("Keli/Desa", "")
+                  .replaceAll("Kevbesa", "")
+                  .replaceAll("Kell/Desa", "")
+                  .replaceAll("elDesa", "")
+                  .replaceAll("KellDesa", "")
+                  .replaceAll("KelDesa", "")
+                  .replaceAll("RT", "")
+                  .replaceAll("RW", "")
+                  .trim();
+              print("------ alamat");
+              print(alamatResult);
+            }
+          }
+          if (alamatRect == null) {
+            print("alamatRect null bosku");
+          }
+
           if (isInside(data.boundingBox, tanggalLahirRect)) {
-            tglLahirResult = data.text;
+            final temp = data.text.replaceAll("Tempat/Tgi Lahir", "");
+            final result = temp.substring(0, temp.indexOf(',') + 1);
+            print(result);
+            if (result != null && result.isNotEmpty) {
+              tglLahirResult =
+                  temp.replaceAll(result, "").replaceAll(":", "").trim();
+            }
             print("------ tgllahir");
             print(tglLahirResult);
           }
-          if (isInside(data.boundingBox, agamaRect)) {
-            agamaResult = data.text;
-            print("------ agama");
-            print(agamaResult);
+          if (tanggalLahirRect == null) {
+            print("tglLahirRect null bosku");
           }
+
+          if (isInside(data.boundingBox, agamaRect)) {
+            if (data.text.toLowerCase() != "agama") {
+              agamaResult = data.text.replaceAll("Agama", "ƒ");
+              print("------ agama");
+              print(agamaResult);
+            }
+          }
+          if (agamaRect == null) {
+            print("agamaRect null bosku");
+          }
+
           if (isInside(data.boundingBox, statusKawinRect)) {
-            statusKawinResult = data.text;
-            print("------ ");
+            statusKawinResult = data.text
+                .replaceAll("Status Perkawinan", "")
+                .replaceAll(":", "")
+                .trim();
+            print("------ status kawin result ");
             print(statusKawinResult);
+          }
+          if (statusKawinRect == null) {
+            print("kawin result null bosku");
           }
         }
       }
@@ -122,26 +195,53 @@ class ScanKtpMlKitImpl implements ScanKtpMlKitAbs {
     }
 
     print("result");
-    print(nameResult.toString());
-    print(alamatResult.toString());
-    print(tglLahirResult.toString());
-    print(agamaResult.toString());
-    print(statusKawinResult.toString());
+    print("nama : " + nameResult.toString());
+    print("alamat : " + alamatResult.toString());
+    print("tglLahir : " + tglLahirResult.toString());
+    print("agama : " + agamaResult.toString());
+    print("status kawin : " + statusKawinResult.toString());
+
+    return UserDataEntity(
+        namaLengkap: nameResult,
+        tanggalLahir: tglLahirResult,
+        alamat: alamatResult,
+        agama: agamaResult,
+        statusPerkawinan: statusKawinResult);
   }
 
   bool isInside(Rect rect1, Rect rect2) {
     if (rect1 == null) {
       return false;
     }
-    if(rect2 == null){
+
+    if (rect2 == null) {
       return false;
     }
-    if (rect1.contains(rect2.center)) {
+
+    if (rect1.center.dy <= rect2.bottom &&
+        rect1.center.dy >= rect2.top &&
+        rect1.center.dx <= 290) {
+      return true;
+    }
+    return false;
+  }
+
+  bool isInside3rect({Rect isThisRect, Rect isInside, Rect andAbove}) {
+    if (isThisRect == null) {
       return false;
     }
-    if (rect2.contains(rect1.center)) {
+
+    if (isInside == null) {
       return false;
     }
-    return true;
+    if (andAbove == null) {
+      return false;
+    }
+
+    if (isThisRect.center.dy <= andAbove.top &&
+        isThisRect.center.dy >= isInside.top) {
+      return true;
+    }
+    return false;
   }
 }
