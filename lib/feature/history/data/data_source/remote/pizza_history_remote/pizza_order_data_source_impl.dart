@@ -49,7 +49,9 @@ class PizzaHistoryDataSourceImpl extends PizzaHistoryDataSourceAbs {
         element.docs.forEach(
           (element) {
             print("document id" + element.id);
-            collectionHistoryRef.doc(element.id).set(element.data());
+            collectionHistoryRef.doc(element.id).set(
+                  element.data(),
+                );
           },
         );
       },

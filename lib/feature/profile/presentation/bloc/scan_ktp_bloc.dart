@@ -3,7 +3,7 @@ import 'dart:io';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter_text_recognition/feature/profile/domain/entity/user_data_entity.dart';
+import 'package:flutter_text_recognition/feature/profile/domain/entity/ktp_data_entity.dart';
 import 'package:flutter_text_recognition/feature/profile/domain/usecase/scan_ktp_usecase.dart';
 import 'package:meta/meta.dart';
 

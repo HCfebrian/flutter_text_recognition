@@ -2,7 +2,6 @@ import 'package:camera_camera/camera_camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_text_recognition/core/global_variable.dart';
 
-
 class CustomCamera extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -25,7 +24,7 @@ class CustomCamera extends StatelessWidget {
                 margin: EdgeInsets.only(
                     top: MediaQuery.of(context).size.height * 0.045),
                 child: Text(
-                  "Place your receipt and Receipt ID within the box",
+                  "Place your ID within the box",
                   style: TextStyle(
                       fontSize: MediaQuery.of(context).size.width * 0.04,
                       color: Colors.white,
@@ -56,14 +55,16 @@ class _FocusRectangle extends StatelessWidget {
             child: Column(
               children: [
                 Flexible(
-                  flex: 1,
+                  flex: 8,
                   child: Container(),
                 ),
-                Flexible(
-                  flex: 1,
-                  child: Container(
-                    width: MediaQuery.of(context).size.width * 0.5,
-                    color: Colors.black.withOpacity(0.3),
+                Padding(
+                  padding: const EdgeInsets.all(15),
+                  child: AspectRatio(
+                    aspectRatio: (1.56 / 1),
+                    child: Container(
+                      color: Colors.black.withOpacity(0.3),
+                    ),
                   ),
                 ),
                 Flexible(

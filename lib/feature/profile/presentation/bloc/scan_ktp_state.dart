@@ -12,7 +12,7 @@ class ScanKtpInitial extends ScanKtpState {
 }
 
 class ScanKtpSuccessState extends ScanKtpState{
-  final UserDataEntity userData;
+  final KtpDataEntity userData;
 
   ScanKtpSuccessState({@required this.userData});
 }

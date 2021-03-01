@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:flutter_text_recognition/feature/profile/data/data_source/local/ml_kit/scan_ktp_ml_kit_abs.dart';
 import 'package:flutter_text_recognition/feature/profile/domain/contract_repo/scan_ktp_contract_repo.dart';
-import 'package:flutter_text_recognition/feature/profile/domain/entity/user_data_entity.dart';
+import 'package:flutter_text_recognition/feature/profile/domain/entity/ktp_data_entity.dart';
 import 'package:meta/meta.dart';
 
 class ScanKtpRepoImpl implements ScanKtpRepoAbs{
@@ -10,7 +10,7 @@ class ScanKtpRepoImpl implements ScanKtpRepoAbs{
 
   ScanKtpRepoImpl({@required this.scanKtpMlKit});
   @override
-  Future<UserDataEntity> scanUserData(File fileImage) {
+  Future<KtpDataEntity> scanUserData(File fileImage) {
     return scanKtpMlKit.scanKtp(fileImage: fileImage);
   }
 }

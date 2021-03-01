@@ -88,5 +88,5 @@ void init() {
   sl.registerLazySingleton(() => ImagePicker());
   sl.registerLazySingleton(() => Levenshtein());
   sl.registerLazySingleton(() => Jaccard());
-  sl.registerLazySingleton(() => FirebaseVision.instance.textRecognizer());
+  sl.registerLazySingleton(() => FirebaseVision.instance.cloudTextRecognizer());
 }

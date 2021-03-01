@@ -6,23 +6,33 @@ import 'package:flutter_text_recognition/feature/profile/presentation/widget/cus
 import 'package:intl/intl.dart';
 
 class EditProfileScreen extends StatelessWidget {
-  final TextEditingController tecDate = TextEditingController();
+  final TextEditingController tecNik = TextEditingController();
   final TextEditingController tecNama = TextEditingController();
+  final TextEditingController tecDate = TextEditingController();
+  final TextEditingController tecTempalLahir = TextEditingController();
+  final TextEditingController tecKelamin = TextEditingController();
   final TextEditingController tecAlamat = TextEditingController();
   final TextEditingController tecAgama = TextEditingController();
   final TextEditingController tecPerkawinan = TextEditingController();
+  final TextEditingController tecPekerjaan = TextEditingController();
+  final TextEditingController tecKewarganegaraan = TextEditingController();
   final DateFormat dateFormat = DateFormat("dd-MM-yyyy");
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<ScanKtpBloc,ScanKtpState>(
+    return BlocListener<ScanKtpBloc, ScanKtpState>(
       listener: (BuildContext context, state) {
-        if(state is ScanKtpSuccessState){
-           tecDate.text =state.userData.tanggalLahir;
-           tecNama.text =state.userData.namaLengkap;
-           tecAlamat.text =state.userData.alamat;
-           tecAgama.text =state.userData.agama;
-           tecPerkawinan.text =state.userData.statusPerkawinan;
+        if (state is ScanKtpSuccessState) {
+          tecNik.text = state.userData.nik;
+          tecNama.text = state.userData.namaLengkap;
+          tecDate.text = state.userData.tanggalLahir;
+          tecTempalLahir.text = state.userData.tempatLahir;
+          tecKelamin.text = state.userData.jenisKelamin;
+          tecAlamat.text = state.userData.alamatFull;
+          tecAgama.text = state.userData.agama;
+          tecPerkawinan.text = state.userData.statusPerkawinan;
+          tecPekerjaan.text = state.userData.pekerjaan;
+          tecKewarganegaraan.text = state.userData.kewarganegaraan;
         }
       },
       child: Scaffold(
@@ -60,6 +70,14 @@ class EditProfileScreen extends StatelessWidget {
                 ],
               ),
               TextFormField(
+                controller: tecNik,
+                style: TextStyle(color: appColorAccent0Gray),
+                decoration: InputDecoration(
+                  labelText: 'NIK',
+                  labelStyle: TextStyle(color: appColorAccent0Gray),
+                ),
+              ),
+              TextFormField(
                 controller: tecNama,
                 style: TextStyle(color: appColorAccent0Gray),
                 decoration: InputDecoration(
@@ -87,6 +105,14 @@ class EditProfileScreen extends StatelessWidget {
                 ),
               ),
               TextFormField(
+                controller: tecKelamin,
+                style: TextStyle(color: appColorAccent0Gray),
+                decoration: InputDecoration(
+                  labelText: 'Jenis Kelamin',
+                  labelStyle: TextStyle(color: appColorAccent0Gray),
+                ),
+              ),
+              TextFormField(
                 controller: tecAlamat,
                 style: TextStyle(color: appColorAccent0Gray),
                 decoration: InputDecoration(
@@ -110,13 +136,32 @@ class EditProfileScreen extends StatelessWidget {
                   labelStyle: TextStyle(color: appColorAccent0Gray),
                 ),
               ),
+              TextFormField(
+                controller: tecPekerjaan,
+                style: TextStyle(color: appColorAccent0Gray),
+                decoration: InputDecoration(
+                  labelText: 'Pekerjaan',
+                  labelStyle: TextStyle(color: appColorAccent0Gray),
+                ),
+              ),
+              TextFormField(
+                controller: tecKewarganegaraan,
+                style: TextStyle(color: appColorAccent0Gray),
+                decoration: InputDecoration(
+                  labelText: 'Kewarganegaraan',
+                  labelStyle: TextStyle(color: appColorAccent0Gray),
+                ),
+              ),
               FlatButton(
                   onPressed: () async {
                     final result = await Navigator.of(context).push(
-                        MaterialPageRoute(builder: (context) => CustomCamera()));
-
-                    BlocProvider.of<ScanKtpBloc>(context)
-                        .add(ScanKtpInputEvent(fileImage: result));
+                      MaterialPageRoute(
+                        builder: (context) => CustomCamera(),
+                      ),
+                    );
+                    BlocProvider.of<ScanKtpBloc>(context).add(
+                      ScanKtpInputEvent(fileImage: result),
+                    );
                   },
                   child: Text("Scan Ktp"))
             ],
