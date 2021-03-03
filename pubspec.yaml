@@ -44,8 +44,6 @@ dependencies:
   image_picker: ^0.6.7+17
   #  camera: ^0.6.4+5
   camera_camera: ^1.0.34+1
-  camera: ^0.7.0+2
-
 
   # not necessary i just want to try it
   sliding_up_panel: ^1.0.2

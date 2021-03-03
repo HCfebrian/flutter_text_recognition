@@ -1,24 +1,18 @@
 
 
-class FirebaseException implements Exception {
+class FirebaseFailure implements Exception {
   final message;
 
-  FirebaseException(this.message);
+  FirebaseFailure(this.message);
 }
 
-class CameraException implements Exception {
+class CameraFailure implements Exception {
   final message;
 
-  CameraException(this.message);
+  CameraFailure(this.message);
 }
 
-class MLException implements Exception {
+class MLFailure implements Exception {
   final message;
-  MLException( this.message);
+  MLFailure( this.message);
 }
-
-class SimilarityException implements Exception {
-  final message;
-  SimilarityException( this.message);
-}
-

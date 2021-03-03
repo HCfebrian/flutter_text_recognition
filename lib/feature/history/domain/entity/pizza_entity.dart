@@ -1,27 +1,26 @@
 import 'package:equatable/equatable.dart';
-import 'package:flutter/material.dart';
 
 class PizzaHistoryEntity extends Equatable {
-  final String recipeId;
-  final String purchasePicUrl;
-  final String purchaseId;
-  final String purchaseDate;
-  final String purchaseQuantity;
-  final String pizzaName;
-  final String pizzaPrice;
-  final String pizzaSize;
-  final String pizzaCal;
+  final recipeId;
+  final purchasePicUrl;
+  final purchaseId;
+  final purchaseDate;
+  final purchaseQuantity;
+  final pizzaName;
+  final pizzaPrice;
+  final pizzaSize;
+  final pizzaCal;
 
   PizzaHistoryEntity(
-      {@required this.recipeId,
-      @required this.purchaseId,
-      @required this.purchaseDate,
-      @required this.purchaseQuantity,
-      @required this.pizzaName,
-      @required this.pizzaPrice,
-      @required this.pizzaSize,
-      @required this.pizzaCal,
-      @required this.purchasePicUrl});
+      this.recipeId,
+      this.purchaseId,
+      this.purchaseDate,
+      this.purchaseQuantity,
+      this.pizzaName,
+      this.pizzaPrice,
+      this.pizzaSize,
+      this.pizzaCal,
+      this.purchasePicUrl);
 
   @override
   List<Object> get props => [

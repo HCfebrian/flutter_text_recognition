@@ -14,15 +14,15 @@ class PizzaEntityConverter extends PizzaHistoryEntity {
     @required pizzaCal,
     @required purchasePicUrl,
   }) : super(
-          recipeId: recipeId,
-          purchaseId: purchaseId,
-          purchaseDate: purchaseDate,
-          purchaseQuantity: purchaseQuantity,
-          pizzaName: pizzaName,
-          pizzaPrice: pizzaPrice,
-          pizzaSize: pizzaSize,
-          pizzaCal: pizzaCal,
-          purchasePicUrl: purchasePicUrl,
+          recipeId,
+          purchaseId,
+          purchaseDate,
+          purchaseQuantity,
+          pizzaName,
+          pizzaPrice,
+          pizzaSize,
+          pizzaCal,
+          purchasePicUrl,
         );
 
   factory PizzaEntityConverter.from(DocumentSnapshot ds) {
