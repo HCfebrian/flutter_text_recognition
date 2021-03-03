@@ -4,6 +4,8 @@ import 'dart:ui';
 import 'package:firebase_ml_vision/firebase_ml_vision.dart';
 import 'package:flutter_text_recognition/feature/profile/data/data_source/local/ml_kit/scan_ktp_ml_kit_abs.dart';
 import 'package:flutter_text_recognition/feature/profile/data/entity_converter/ktp_data_converter.dart';
+import 'package:flutter_text_recognition/feature/profile/data/entity_converter/ktp_value_tolerance.dart';
+import 'package:flutter_text_recognition/feature/profile/data/entity_converter/rect_comparator.dart';
 import 'package:flutter_text_recognition/feature/profile/domain/entity/ktp_data_entity.dart';
 import 'package:meta/meta.dart';
 
@@ -16,6 +18,19 @@ class ScanKtpMlKitImpl implements ScanKtpMlKitAbs {
   Future<KtpDataEntity> scanKtp({File fileImage}) async {
     final firebaseVision = FirebaseVisionImage.fromFile(fileImage);
     final visionText = await textRecognizer.processImage(firebaseVision);
+
+    Rect nikRect;
+    Rect namaRect;
+    Rect alamatRect;
+    Rect rtrwRect;
+    Rect kelDesaRect;
+    Rect kecamatanRect;
+    Rect jenisKelaminRect;
+    Rect tempatTanggalLahirRect;
+    Rect agamaRect;
+    Rect statusKawinRect;
+    Rect pekerjaanRect;
+    Rect kewarganegaraanRect;
 
     String nikResult = "";
     String nameResult = "";
@@ -32,19 +47,6 @@ class ScanKtpMlKitImpl implements ScanKtpMlKitAbs {
     String pekerjaanResult = "";
     String kewarganegaraanResult = "";
 
-    Rect nikRect;
-    Rect namaRect;
-    Rect alamatRect;
-    Rect rtrwRect;
-    Rect kelDesaRect;
-    Rect kecamatanRect;
-    Rect jenisKelaminRect;
-    Rect tempatTanggalLahirRect;
-    Rect agamaRect;
-    Rect statusKawinRect;
-    Rect pekerjaanRect;
-    Rect kewarganegaraanRect;
-
     try {
       for (int i = 0; i < visionText.blocks.length; i++) {
         for (int j = 0; j < visionText.blocks[i].lines.length; j++) {
@@ -60,62 +62,62 @@ class ScanKtpMlKitImpl implements ScanKtpMlKitAbs {
 
             if (checkNikField(data.text)) {
               nikRect = data.boundingBox;
-              print("nik field detected");
+              print("nik rect detected");
             }
 
             if (checkNamaField(data.text)) {
               namaRect = data.boundingBox;
-              print("nama field detected");
+              print("nama rect detected");
             }
 
             if (checkTglLahirField(data.text)) {
               tempatTanggalLahirRect = data.boundingBox;
-              print("tempat tgllahir field detected");
+              print("tempat tgllahir rect detected");
             }
 
             if (checkJenisKelaminField(data.text)) {
               jenisKelaminRect = data.boundingBox;
-              print("jenis kelamin field detected");
+              print("jenis kelamin rect detected");
             }
 
             if (checkAlamatField(data.text)) {
               alamatRect = data.boundingBox;
-              print("alamat field detected");
+              print("alamat rect detected");
             }
 
             if (checkRtRwField(data.text)) {
               rtrwRect = data.boundingBox;
-              print("RT/RW field detected");
+              print("RT/RW rect detected");
             }
 
             if (checkKelDesaField(data.text)) {
               kelDesaRect = data.boundingBox;
-              print("kelurahan / desa field detected");
+              print("kelurahan / desa rect detected");
             }
 
             if (checkKecamatanField(data.text)) {
               kecamatanRect = data.boundingBox;
-              print("kecamatan field detected");
+              print("kecamatan rect detected");
             }
 
             if (checkAgamaField(data.text)) {
               agamaRect = data.boundingBox;
-              print("agama field detected");
+              print("agama rect detected");
             }
 
             if (checkKawinField(data.text)) {
               statusKawinRect = data.boundingBox;
-              print("statusKawin field detected");
+              print("statusKawin rect detected");
             }
 
             if (checkPekerjaanField(data.text)) {
               pekerjaanRect = data.boundingBox;
-              print("pekerjaan field detected");
+              print("pekerjaan rect detected");
             }
 
             if (checkKewarganegaraanField(data.text)) {
               kewarganegaraanRect = data.boundingBox;
-              print("kewarganegaraan field detected");
+              print("kewarganegaraan rect detected");
             }
           }
         }
@@ -137,54 +139,6 @@ class ScanKtpMlKitImpl implements ScanKtpMlKitAbs {
     print("statusKawin rect " + statusKawinRect.toString());
     print("pekerjaan rect " + pekerjaanRect.toString());
     print("kewarganegaraan rect " + kewarganegaraanRect.toString());
-
-    if (nikRect == null) {
-      print("nikRect null bosku");
-    }
-
-    if (namaRect == null) {
-      print("namaRect null bosku");
-    }
-
-    if (alamatRect == null) {
-      print("alamatRect null bosku");
-    }
-
-    if (rtrwRect == null) {
-      print("rt rw Rect null bosku");
-    }
-
-    if (kelDesaRect == null) {
-      print("kel Desa Rect null bosku");
-    }
-
-    if (kecamatanRect == null) {
-      print("kecamatan Rect null bosku");
-    }
-
-    if (jenisKelaminRect == null) {
-      print("jenis kelamin Rect null bosku");
-    }
-
-    if (tempatTanggalLahirRect == null) {
-      print("tglLahirRect null bosku");
-    }
-
-    if (agamaRect == null) {
-      print("agamaRect null bosku");
-    }
-
-    if (statusKawinRect == null) {
-      print("kawin result null bosku");
-    }
-
-    if (pekerjaanRect == null) {
-      print("pekerjaan result null bosku");
-    }
-
-    if (kewarganegaraanRect == null) {
-      print("kewarganegaraan result null bosku");
-    }
 
     try {
       for (int i = 0; i < visionText.blocks.length; i++) {
@@ -328,114 +282,5 @@ class ScanKtpMlKitImpl implements ScanKtpMlKitAbs {
         kecamatan: kecamatanResult,
         kelDesa: kelDesaResult,
         rtrw: rtrwResult);
-  }
-
-  bool isInside(Rect rect, Rect isInside) {
-    if (rect == null) {
-      return false;
-    }
-
-    if (isInside == null) {
-      return false;
-    }
-
-    if (rect.center.dy <= isInside.bottom &&
-        rect.center.dy >= isInside.top &&
-        rect.center.dy >= isInside.right&&
-        rect.center.dx <= 390) {
-      return true;
-    }
-    return false;
-  }
-
-  bool isInside3rect({Rect isThisRect, Rect isInside, Rect andAbove}) {
-    if (isThisRect == null) {
-      return false;
-    }
-
-    if (isInside == null) {
-      return false;
-    }
-    if (andAbove == null) {
-      return false;
-    }
-
-    if (isThisRect.center.dy <= andAbove.top &&
-        isThisRect.center.dy >= isInside.top &&
-        isThisRect.center.dx >= isInside.left) {
-      return true;
-    }
-    return false;
-  }
-
-  bool checkNikField(String dataText) {
-    final text = dataText.toLowerCase().trim();
-    return text == "nik";
-  }
-
-  bool checkNamaField(String dataText) {
-    final text = dataText.toLowerCase().trim();
-    return text == "nama" || text == "nema" || text == "name";
-  }
-
-  bool checkTglLahirField(String dataText) {
-    final text = dataText.toLowerCase().trim();
-    return text == "lahir" ||
-        text == "tempat" ||
-        text == "tempatigllahir" ||
-        text == "empatgllahir" ||
-        text == "tempat/tgl";
-  }
-
-  bool checkJenisKelaminField(String dataText) {
-    final text = dataText.toLowerCase().trim();
-    return text == "kelamin" || text == "jenis";
-  }
-
-  bool checkAlamatField(String dataText) {
-    final text = dataText.toLowerCase().trim();
-    return text == "alamat" ||
-        text == "lamat" ||
-        text == "alaahom" ||
-        text == "alama" ||
-        text == "alamao" ||
-        text == "alamarw";
-  }
-
-  bool checkRtRwField(String dataText) {
-    final text = dataText.toLowerCase().trim();
-    return text == "rt/rw" || text == "rw " || text == "rt" || text == "rtirw";
-  }
-
-  bool checkKelDesaField(String dataText) {
-    final text = dataText.toLowerCase().trim();
-    return text == "kel/desa" || text == "helldesa" || text == "kelldesa";
-  }
-
-  bool checkKecamatanField(String dataText) {
-    final text = dataText.toLowerCase().trim();
-    return text == "kecamatan" || dataText.contains("kecamatan");
-  }
-
-  bool checkAgamaField(String dataText) {
-    final text = dataText.toLowerCase().trim();
-    return text == "agama" || text == "gama";
-  }
-
-  bool checkKawinField(String dataText) {
-    final text = dataText.toLowerCase().trim();
-    return text == "kawin" || text == "perkawinan" || text == "perkawinan:";
-  }
-
-  bool checkPekerjaanField(String dataText) {
-    final text = dataText.toLowerCase().trim();
-    return text == "kerja" || text == "pekerjaan";
-  }
-
-  bool checkKewarganegaraanField(String dataText) {
-    final text = dataText.toLowerCase().trim();
-    return text == "kewarganegaraan" ||
-        text == "negaraan" ||
-        text == "kewarganegaraan:";
   }
 }
