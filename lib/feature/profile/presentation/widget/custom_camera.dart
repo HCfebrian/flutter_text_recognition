@@ -24,7 +24,7 @@ class CustomCamera extends StatelessWidget {
                 margin: EdgeInsets.only(
                     top: MediaQuery.of(context).size.height * 0.045),
                 child: Text(
-                  "Place your ID within the box",
+                  "Place your ID Card within the box",
                   style: TextStyle(
                       fontSize: MediaQuery.of(context).size.width * 0.04,
                       color: Colors.white,

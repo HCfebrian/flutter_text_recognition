@@ -27,7 +27,7 @@ class MLKitPlatformImpl extends MLKitLocalAbs {
 
     print("full text: ");
     print(normalizeReceiptText(visionText.text));
-    print("picture dimensiton :");
+    print("picture dimension :");
     var decodedImage = await decodeImageFromList(imageFile.readAsBytesSync());
     print("w: " + decodedImage.width.toString());
     print("h: " + decodedImage.height.toString());

@@ -10,6 +10,5 @@ class ScanKtpInputEvent extends ScanKtpEvent{
   ScanKtpInputEvent({@required this.fileImage});
 
   @override
-  // TODO: implement props
   List<Object> get props => [fileImage];
 }

@@ -15,4 +15,6 @@ class ScanKtpSuccessState extends ScanKtpState{
   final KtpDataEntity userData;
 
   ScanKtpSuccessState({@required this.userData});
+  @override
+  List<Object> get props => [userData];
 }

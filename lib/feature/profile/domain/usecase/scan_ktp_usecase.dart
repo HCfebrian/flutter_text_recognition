@@ -13,7 +13,7 @@ class ScanKtpUsecase{
 
     final result = await scanKtpRepoAbs.scanUserData(fileImage);
 
-    print("result before normalization");
+    print("result after normalization");
     print("nik : " + result.nik.toString());
     print("nama : " + result.namaLengkap.toString());
     print("tempatLahir : " +  result.tempatLahir.toString());

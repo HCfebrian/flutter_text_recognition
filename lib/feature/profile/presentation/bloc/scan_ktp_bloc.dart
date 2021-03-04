@@ -19,7 +19,6 @@ class ScanKtpBloc extends Bloc<ScanKtpEvent, ScanKtpState> {
     ScanKtpEvent event,
   ) async* {
     if(event is ScanKtpInputEvent){
-      print("lol");
       yield ScanKtpInitial();
       final result = await scanKtpUsecase.getUserData(event.fileImage);
       if(result != null){
