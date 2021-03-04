@@ -22,9 +22,9 @@ String normalizeJenisKelaminText(String text) {
   String result = text.toUpperCase();
 
   result = result
-      .replaceAll("GOL DARAH", "")
-      .replaceAll("GOL. DARAH", "")
       .replaceAll("GOL. DARAHO", "")
+      .replaceAll("GOL. DARAH", "")
+      .replaceAll("GOL DARAH", "")
       .replaceAll("LAKFEARI", "")
       .replaceAll("LAKFLAK", "")
       .replaceAll("KELAMIN", "")
