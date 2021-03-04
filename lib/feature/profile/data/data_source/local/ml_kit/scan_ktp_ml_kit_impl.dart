@@ -139,53 +139,6 @@ class ScanKtpMlKitImpl implements ScanKtpMlKitAbs {
     print("pekerjaan rect " + pekerjaanRect.toString());
     print("kewarganegaraan rect " + kewarganegaraanRect.toString());
 
-    if (nikRect == null) {
-      print("nikRect null bosku");
-    }
-
-    if (namaRect == null) {
-      print("namaRect null bosku");
-    }
-
-    if (alamatRect == null) {
-      print("alamatRect null bosku");
-    }
-
-    if (rtrwRect == null) {
-      print("rt rw Rect null bosku");
-    }
-
-    if (kelDesaRect == null) {
-      print("kel Desa Rect null bosku");
-    }
-
-    if (kecamatanRect == null) {
-      print("kecamatan Rect null bosku");
-    }
-
-    if (jenisKelaminRect == null) {
-      print("jenis kelamin Rect null bosku");
-    }
-
-    if (tempatTanggalLahirRect == null) {
-      print("tglLahirRect null bosku");
-    }
-
-    if (agamaRect == null) {
-      print("agamaRect null bosku");
-    }
-
-    if (statusKawinRect == null) {
-      print("kawin result null bosku");
-    }
-
-    if (pekerjaanRect == null) {
-      print("pekerjaan result null bosku");
-    }
-
-    if (kewarganegaraanRect == null) {
-      print("kewarganegaraan result null bosku");
-    }
 
     try {
       for (int i = 0; i < visionText.blocks.length; i++) {
@@ -329,44 +282,6 @@ class ScanKtpMlKitImpl implements ScanKtpMlKitAbs {
         kecamatan: kecamatanResult,
         kelDesa: kelDesaResult,
         rtrw: rtrwResult);
-  }
-
-  bool isInside(Rect rect, Rect isInside) {
-    if (rect == null) {
-      return false;
-    }
-
-    if (isInside == null) {
-      return false;
-    }
-
-    if (rect.center.dy <= isInside.bottom &&
-        rect.center.dy >= isInside.top &&
-        rect.center.dy >= isInside.right&&
-        rect.center.dx <= 390) {
-      return true;
-    }
-    return false;
-  }
-
-  bool isInside3rect({Rect isThisRect, Rect isInside, Rect andAbove}) {
-    if (isThisRect == null) {
-      return false;
-    }
-
-    if (isInside == null) {
-      return false;
-    }
-    if (andAbove == null) {
-      return false;
-    }
-
-    if (isThisRect.center.dy <= andAbove.top &&
-        isThisRect.center.dy >= isInside.top &&
-        isThisRect.center.dx >= isInside.left) {
-      return true;
-    }
-    return false;
   }
 
 

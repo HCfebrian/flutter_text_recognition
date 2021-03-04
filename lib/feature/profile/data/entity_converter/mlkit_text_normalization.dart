@@ -212,6 +212,7 @@ String normalizeAgamaText(String text) {
   }
   print(result);
   if (result.trim().isEmpty) {
+    return "";
   } else {
     return result;
   }
