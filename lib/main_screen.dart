@@ -1,7 +1,6 @@
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_text_recognition/core/colors.dart';
-import 'package:flutter_text_recognition/feature/history/presentation/screen/purchase_page.dart';
 import 'package:flutter_text_recognition/feature/profile/presentation/screen/profile_screen.dart';
 
 
@@ -110,7 +109,16 @@ class _MainScreenState extends State<MainScreen> {
                   child: Text("Cart"),
                 ),
               ),
-              PurchaseScreen(),
+              Scaffold(
+                appBar: AppBar(
+                  title: Center(
+                    child: Text("History"),
+                  ),
+                ),
+                body: Center(
+                  child: Text("History"),
+                ),
+              ),
               ProfileScreen()
             ],
           ),

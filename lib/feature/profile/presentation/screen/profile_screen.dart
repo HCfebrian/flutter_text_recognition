@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_text_recognition/core/colors.dart';
-import 'package:flutter_text_recognition/feature/history/presentation/widget/backdrop_widget.dart';
 import 'package:flutter_text_recognition/feature/profile/presentation/screen/edit_profile_screen.dart';
 
 class ProfileScreen extends StatelessWidget {
@@ -14,7 +13,6 @@ class ProfileScreen extends StatelessWidget {
         children: [
           Stack(
             children: [
-              Backdrop(color: appColorSecondaryDarkBlue),
               Container(
                 width: MediaQuery.of(context).size.width,
                 child: Column(
