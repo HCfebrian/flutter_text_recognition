@@ -3,8 +3,8 @@ import 'dart:ui';
 
 import 'package:firebase_ml_vision/firebase_ml_vision.dart';
 import 'package:flutter_text_recognition/feature/profile/data/data_source/local/ml_kit/scan_ktp_ml_kit_abs.dart';
-import 'package:flutter_text_recognition/feature/profile/data/entity_converter/field_detector.dart';
-import 'package:flutter_text_recognition/feature/profile/data/entity_converter/ktp_data_converter.dart';
+import 'package:flutter_text_recognition/feature/profile/data/modifyer/field_detector.dart';
+import 'package:flutter_text_recognition/feature/profile/data/modifyer/ktp_data_entity_converter.dart';
 import 'package:flutter_text_recognition/feature/profile/domain/entity/ktp_data_entity.dart';
 import 'package:meta/meta.dart';
 
@@ -46,6 +46,8 @@ class ScanKtpMlKitImpl implements ScanKtpMlKitAbs {
     Rect pekerjaanRect;
     Rect kewarganegaraanRect;
 
+
+    //search field rect
     try {
       for (int i = 0; i < visionText.blocks.length; i++) {
         for (int j = 0; j < visionText.blocks[i].lines.length; j++) {
@@ -139,7 +141,6 @@ class ScanKtpMlKitImpl implements ScanKtpMlKitAbs {
     print("pekerjaan rect " + pekerjaanRect.toString());
     print("kewarganegaraan rect " + kewarganegaraanRect.toString());
 
-
     try {
       for (int i = 0; i < visionText.blocks.length; i++) {
         for (int j = 0; j < visionText.blocks[i].lines.length; j++) {
@@ -151,7 +152,7 @@ class ScanKtpMlKitImpl implements ScanKtpMlKitAbs {
             print(nikResult);
           }
 
-          if (isInside3rect(
+          if (isInside3Rect(
               isThisRect: data.boundingBox,
               isInside: namaRect,
               andAbove: tempatTanggalLahirRect)) {
@@ -188,7 +189,7 @@ class ScanKtpMlKitImpl implements ScanKtpMlKitAbs {
             print(rtrwResult);
           }
 
-          if (isInside3rect(
+          if (isInside3Rect(
               isThisRect: data.boundingBox,
               isInside: alamatRect,
               andAbove: agamaRect)) {
@@ -202,7 +203,6 @@ class ScanKtpMlKitImpl implements ScanKtpMlKitAbs {
             print("------ alamat  ");
             print(alamatResult);
           }
-
 
           if (isInside(data.boundingBox, rtrwRect)) {
             rtrwResult = rtrwResult + " " + data.text;
@@ -283,6 +283,4 @@ class ScanKtpMlKitImpl implements ScanKtpMlKitAbs {
         kelDesa: kelDesaResult,
         rtrw: rtrwResult);
   }
-
-
 }

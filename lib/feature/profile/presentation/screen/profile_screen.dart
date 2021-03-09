@@ -66,20 +66,6 @@ class ProfileScreen extends StatelessWidget {
               )
             ],
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              Column(
-                children: [Text("15"), Text("Order")],
-              ),
-              Column(
-                children: [Text("15"), Text("Order")],
-              ),
-              Column(
-                children: [Text("15"), Text("Order")],
-              ),
-            ],
-          )
         ],
       ),
     );

@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_text_recognition/feature/profile/data/entity_converter/mlkit_text_normalization.dart';
+import 'package:flutter_text_recognition/feature/profile/data/modifyer/mlkit_text_normalization.dart';
 import 'package:flutter_text_recognition/feature/profile/domain/entity/ktp_data_entity.dart';
 
 class KtpDataEntityConverter extends KtpDataEntity {

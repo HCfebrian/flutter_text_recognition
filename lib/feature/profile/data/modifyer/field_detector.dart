@@ -84,13 +84,14 @@ bool isInside(Rect rect, Rect isInside) {
   if (rect.center.dy <= isInside.bottom &&
       rect.center.dy >= isInside.top &&
       rect.center.dy >= isInside.right&&
-      rect.center.dx <= 390) {
+      rect.center.dx <= 650) {
     return true;
   }
+
   return false;
 }
 
-bool isInside3rect({Rect isThisRect, Rect isInside, Rect andAbove}) {
+bool isInside3Rect({Rect isThisRect, Rect isInside, Rect andAbove}) {
   if (isThisRect == null) {
     return false;
   }
@@ -98,6 +99,7 @@ bool isInside3rect({Rect isThisRect, Rect isInside, Rect andAbove}) {
   if (isInside == null) {
     return false;
   }
+
   if (andAbove == null) {
     return false;
   }
@@ -107,5 +109,6 @@ bool isInside3rect({Rect isThisRect, Rect isInside, Rect andAbove}) {
       isThisRect.center.dx >= isInside.left) {
     return true;
   }
+
   return false;
 }

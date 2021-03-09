@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:edit_distance/edit_distance.dart';
 import 'package:firebase_ml_vision/firebase_ml_vision.dart';
 import 'package:flutter_text_recognition/feature/profile/data/data_source/local/ml_kit/scan_ktp_ml_kit_abs.dart';
 import 'package:flutter_text_recognition/feature/profile/data/data_source/local/ml_kit/scan_ktp_ml_kit_impl.dart';
@@ -8,7 +7,6 @@ import 'package:flutter_text_recognition/feature/profile/domain/contract_repo/sc
 import 'package:flutter_text_recognition/feature/profile/domain/usecase/scan_ktp_usecase.dart';
 import 'package:flutter_text_recognition/feature/profile/presentation/bloc/scan_ktp_bloc.dart';
 import 'package:get_it/get_it.dart';
-import 'package:image_picker/image_picker.dart';
 
 final sl = GetIt.instance;
 
@@ -27,17 +25,7 @@ void init() {
   sl.registerLazySingleton<ScanKtpMlKitAbs>(
       () => ScanKtpMlKitImpl(textRecognizer: sl()));
 
-// Core
-  //feature.history.presentation
-
-  //util
-
-  //network
-
 // External Dependency
   sl.registerLazySingleton(() => FirebaseFirestore.instance);
-  sl.registerLazySingleton(() => ImagePicker());
-  sl.registerLazySingleton(() => Levenshtein());
-  sl.registerLazySingleton(() => Jaccard());
   sl.registerLazySingleton(() => FirebaseVision.instance.cloudTextRecognizer());
 }
