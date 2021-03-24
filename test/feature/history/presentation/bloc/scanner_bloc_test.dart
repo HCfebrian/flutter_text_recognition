@@ -22,11 +22,17 @@ void main() {
     purchaseID: "123456789",
     cashback: 2,
   );
+  final tSimilarityNotConfirmed = SimilarityResult(
+    similarityDistance: 0.1,
+    confirmed: false,
+    purchaseID: "123456789",
+    cashback: 2,
+  );
 
   final tFilePath = File("/test/test/tes.jpg");
 
   test(
-    "should yield ScannerConfirmedState when similarity result is high",
+    "should yield ScannerConfirmedState when similaritydistance is below 0.25",
     () async {
       //arrange
       when(purchaseScanUsecase.getSimilarity(sourceFile: anyNamed("sourceFile")))
@@ -35,6 +41,40 @@ void main() {
       final expected = [
         ScannerInitial(),
         ScannerConfirmedState(tSimilarityResult.cashback)
+      ];
+      expectLater(scannerBloc, emitsInOrder(expected));
+      //act
+      scannerBloc.add(ScanReceiptEvent(path: tFilePath));
+    },
+  );
+
+  test(
+    "should yield ScannerNotConfirmedState when similarityDistance is above 0.25",
+        () async {
+      //arrange
+      when(purchaseScanUsecase.getSimilarity(sourceFile: anyNamed("sourceFile")))
+          .thenAnswer((_) async => tSimilarityNotConfirmed);
+      //assert
+      final expected = [
+        ScannerInitial(),
+        ScannerNotConfirmedState("cannot confirm this receipt")
+      ];
+      expectLater(scannerBloc, emitsInOrder(expected));
+      //act
+      scannerBloc.add(ScanReceiptEvent(path: tFilePath));
+    },
+  );
+
+  test(
+    "should yield ScannerNotConfirmedState error happend",
+        () async {
+      //arrange
+      when(purchaseScanUsecase.getSimilarity(sourceFile: anyNamed("sourceFile")))
+          .thenThrow(Exception("some exception"));
+      //assert
+      final expected = [
+        ScannerInitial(),
+        ScannerNotConfirmedState("some exception")
       ];
       expectLater(scannerBloc, emitsInOrder(expected));
       //act
