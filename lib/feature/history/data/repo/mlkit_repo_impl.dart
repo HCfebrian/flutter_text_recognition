@@ -12,8 +12,8 @@ class MLKitRepoImpl extends MLRepoAbs {
   MLKitRepoImpl({@required this.mlKit});
 
   @override
-  Future<String> getPurchaseID({File imageFile, Size size}) async {
-    return await mlKit.getPurchaseId(imageFile: imageFile, size: size);
+  Future<String> getPurchaseID({File imageFile}) async {
+    return await mlKit.getPurchaseId(imageFile: imageFile);
   }
 
   @override

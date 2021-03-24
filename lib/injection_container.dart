@@ -42,20 +42,25 @@ void init() {
   sl.registerFactory(() => ScannerBloc(purchaseScanUsecase: sl()));
 
   //UseCase
-  sl.registerLazySingleton<ScanKtpUsecase>(() => ScanKtpUsecase(scanKtpRepoAbs: sl()));
+  sl.registerLazySingleton<ScanKtpUsecase>(
+      () => ScanKtpUsecase(scanKtpRepoAbs: sl()));
   sl.registerLazySingleton<OrderHistoryUsecase>(
       () => OrderHistoryUsecase(pizzaRepo: sl()));
-  sl.registerLazySingleton<PurchaseScanUsecase>(() => PurchaseScanUsecase(
-        purchaseRepo: sl(),
-        cameraRepoAbs: sl(),
-        mlkitRepoAbs: sl(),
-        similarityRepo: sl(),
-        pizzarepo: sl(),
-      ));
+  sl.registerLazySingleton<PurchaseScanUsecase>(
+    () => PurchaseScanUsecase(
+      purchaseRepo: sl(),
+      cameraRepoAbs: sl(),
+      mlkitRepoAbs: sl(),
+      similarityRepo: sl(),
+      pizzarepo: sl(),
+    ),
+  );
 
   //repo
-  sl.registerLazySingleton<ScanKtpRepoAbs>(() => ScanKtpRepoImpl(scanKtpMlKit: sl()));
-  sl.registerLazySingleton<SimilarityRepoAbs>(() => SimilarityRepoImpl(jaccard: sl()));
+  sl.registerLazySingleton<ScanKtpRepoAbs>(
+      () => ScanKtpRepoImpl(scanKtpMlKit: sl()));
+  sl.registerLazySingleton<SimilarityRepoAbs>(
+      () => SimilarityRepoImpl(jaccard: sl()));
   sl.registerLazySingleton<PizzaRepoAbs>(
       () => PizzaRepoImpl(pizzaDataSource: sl()));
   sl.registerLazySingleton<PurchaseRepoAbs>(

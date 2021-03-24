@@ -6,15 +6,13 @@ abstract class ScannerEvent extends Equatable {
 
 class ScanReceiptEvent extends ScannerEvent {
   final File path;
-  final Size size;
 
   ScanReceiptEvent({
     @required this.path,
-    @required this.size,
   });
 
   @override
-  List<Object> get props => [path, size];
+  List<Object> get props => [path];
 }
 
 class SetCameraSizeEvent extends ScannerEvent {

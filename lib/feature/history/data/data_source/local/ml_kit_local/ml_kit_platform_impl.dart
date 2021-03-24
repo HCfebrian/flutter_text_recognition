@@ -7,7 +7,6 @@ import 'package:flutter_text_recognition/feature/history/data/data_source/local/
 import 'package:flutter_text_recognition/feature/history/data/entity_converter/mlkit_full_text_normalization.dart';
 import 'package:meta/meta.dart';
 
-
 class MLKitPlatformImpl extends MLKitLocalAbs {
   final TextRecognizer textRecognizer;
 
@@ -35,7 +34,7 @@ class MLKitPlatformImpl extends MLKitLocalAbs {
   }
 
   @override
-  Future<String> getPurchaseId({File imageFile, Size size}) async {
+  Future<String> getPurchaseId({File imageFile}) async {
     String result;
 
     final FirebaseVisionImage visionImage =
@@ -73,8 +72,6 @@ class MLKitPlatformImpl extends MLKitLocalAbs {
     );
 
     try {
-      // for (int i = 0; i < visionText.blocks.length; i++) {
-      //   if (result != null) break;
       for (int j = 0; j < potentialReceiptId.length; j++) {
         if (result != null) break;
         for (int k = 0; k < potentialReceiptId[j].elements.length; k++) {
@@ -88,8 +85,6 @@ class MLKitPlatformImpl extends MLKitLocalAbs {
                 .replaceAll(RegExp('[^0-9]'), '');
             break;
           }
-          // print("!!!! " + visionText.blocks[i].lines[j].text);
-          // }
         }
       }
       print("ID " + result.toString());

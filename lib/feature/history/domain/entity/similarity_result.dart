@@ -3,13 +3,13 @@ import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 
 class SimilarityResult extends Equatable {
-  final double similarity;
+  final double similarityDistance;
   final bool confirmed;
   final String purchaseID;
   final int cashback;
 
   SimilarityResult(
-      {@required this.similarity,
+      {@required this.similarityDistance,
       @required this.confirmed,
       @required this.purchaseID,
       @required this.cashback});
@@ -17,7 +17,7 @@ class SimilarityResult extends Equatable {
   @override
   List<Object> get props => [
         confirmed,
-        similarity,
+        similarityDistance,
         purchaseID,
         cashback,
       ];

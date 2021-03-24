@@ -219,10 +219,10 @@ class HistoryContent extends StatelessWidget {
 
                           print("Size media query" +
                               MediaQuery.of(context).size.toString());
-                          BlocProvider.of<ScannerBloc>(context).add(
-                              ScanReceiptEvent(
-                                  path: val,
-                                  size: MediaQuery.of(context).size));
+                          BlocProvider.of<ScannerBloc>(context)
+                              .add(ScanReceiptEvent(
+                            path: val,
+                          ));
 
                           print("directory val:");
                           print(val.parent.path);
@@ -247,7 +247,7 @@ class HistoryContent extends StatelessWidget {
                     areItemsTheSame: (a, b) => a.purchaseId == b.purchaseId,
                     itemBuilder: (context, animation, item, index) {
                       double bottomPadding = 0;
-                      if(index+1 == state.listPizza.length){
+                      if (index + 1 == state.listPizza.length) {
                         bottomPadding = 80;
                       }
 
@@ -256,7 +256,7 @@ class HistoryContent extends StatelessWidget {
                           curve: Curves.easeInOut,
                           animation: animation,
                           child: Padding(
-                            padding: EdgeInsets.only(bottom : bottomPadding),
+                            padding: EdgeInsets.only(bottom: bottomPadding),
                             child: HorizontalPizzaCard(
                               pizzaCal: item.pizzaCal,
                               purchaseDate: item.purchaseDate,

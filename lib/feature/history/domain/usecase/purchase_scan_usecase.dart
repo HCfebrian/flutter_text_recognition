@@ -16,6 +16,7 @@ class PurchaseScanUsecase {
   final MLRepoAbs mlkitRepoAbs;
   final SimilarityRepoAbs similarityRepo;
   final PizzaRepoAbs pizzarepo;
+  final double distanceTolerance = 0.25;
 
   PurchaseScanUsecase({
     @required this.pizzarepo,
@@ -25,24 +26,24 @@ class PurchaseScanUsecase {
     @required this.similarityRepo,
   });
 
-  bool setSize(Size size){
+  bool setSize(Size size) {
     return mlkitRepoAbs.setCameraSize(size);
   }
 
-  Future<SimilarityResult> getSimilarity({File sourceFile, Size size}) async {
+  Future<SimilarityResult> getSimilarity({File sourceFile}) async {
     File file;
     String purchaseID, mlString, comparableDbText;
     PurchaseEntity resultDb;
 
     //get image
-    if(sourceFile == null){
+    if (sourceFile == null) {
       try {
         file = await cameraRepoAbs.getImage(ImageSource.camera);
         print("file : " + file.path);
       } catch (_) {
         throw Exception("Camera Fail");
       }
-    }else{
+    } else {
       file = sourceFile;
     }
 
@@ -55,7 +56,7 @@ class PurchaseScanUsecase {
 
     //get purchase id from Mlkit
     try {
-      purchaseID = await mlkitRepoAbs.getPurchaseID(imageFile: file, size: size);
+      purchaseID = await mlkitRepoAbs.getPurchaseID(imageFile: file);
       print("purchaseID " + purchaseID.toString());
     } catch (e) {
       print(e);
@@ -91,15 +92,15 @@ class PurchaseScanUsecase {
 
     print("jaccard " + similarityDistance.toString());
 
-    if (similarityDistance < 0.25) {
+    if (similarityDistance < distanceTolerance) {
       print("copy receipt");
       pizzarepo.addReceiptToHistory(purchaseID);
     }
 
     return SimilarityResult(
       purchaseID: purchaseID,
-      similarity: similarityDistance,
-      confirmed: (similarityDistance < 0.25),
+      similarityDistance: similarityDistance,
+      confirmed: (similarityDistance < distanceTolerance),
       cashback: resultDb.cashback,
     );
   }

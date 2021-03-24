@@ -20,15 +20,15 @@ class ScannerBloc extends Bloc<ScannerEvent, ScannerState> {
   Stream<ScannerState> mapEventToState(
     ScannerEvent event,
   ) async* {
-    if(event is SetCameraSizeEvent){
+    if (event is SetCameraSizeEvent) {
       purchaseScanUsecase.setSize(event.size);
     }
 
     if (event is ScanReceiptEvent) {
       yield ScannerInitial();
       try {
-        final result = await purchaseScanUsecase.getSimilarity(
-            sourceFile: event.path, size: event.size);
+        final result =
+            await purchaseScanUsecase.getSimilarity(sourceFile: event.path);
         if (result.confirmed) {
           yield ScannerConfirmedState(result.cashback);
         } else {
